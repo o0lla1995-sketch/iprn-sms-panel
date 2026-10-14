@@ -51,7 +51,8 @@ export async function setSessionCookie(payload: SessionPayload) {
   jar.set(SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
+    // only flag Secure when the panel is actually served over https
+    secure: (process.env.PUBLIC_URL || '').startsWith('https'),
     maxAge: 60 * 60 * 24 * 7,
     path: '/',
   })
