@@ -396,9 +396,14 @@ export async function ensureSeeded(): Promise<void> {
   await seedDemo()
   const rates = await db.rateGroup.count()
   if (rates === 0) {
-    for (const [destination, cls, trueRate, n] of RATE_GROUPS) {
-      await db.rateGroup.create({ data: { destination, class: cls, trueRate, numbersCount: n } })
-    }
+    await db.rateGroup.createMany({
+      data: RATE_GROUPS.map(([destination, cls, trueRate, n]) => ({
+        destination,
+        class: cls,
+        trueRate,
+        numbersCount: n,
+      })),
+    })
     console.log(`[seed] rate groups: ${RATE_GROUPS.length}`)
   }
   console.log(`[seed] ready — admin: ${admin.email}`)

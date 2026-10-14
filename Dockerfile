@@ -9,8 +9,8 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN bunx prisma generate
 RUN bun run build
 
-# ── runtime ────────────────────────────────────────────────────
-FROM oven/bun:1.3
+# ── runtime (plain Node — maximum compatibility for the standalone server) ──
+FROM node:22-slim
 WORKDIR /app
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
@@ -18,13 +18,13 @@ ENV NODE_ENV=production \
     DATABASE_URL=file:/app/db/custom.db
 EXPOSE 3000 2775
 
-# standalone server (includes traced node_modules incl. @prisma/client & bcryptjs)
+# standalone server incl. traced node_modules (prisma client, bcryptjs, …)
 COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
 COPY --from=build /app/public ./public
-# pristine schema template for first boot (volume holds the live db afterwards)
-COPY --from=build /app/db/schema.db /app/db/schema.db
+# pristine schema template kept OUTSIDE /app/db so a volume can shadow db/
+COPY --from=build /app/db/schema.db /app/db-template/schema.db
 
-# first boot: create the live db from the template, then start
-# (instrumentation seeds settings + admin and starts the SMPP gateway on :2775)
-CMD ["sh", "-c", "if [ ! -f /app/db/custom.db ]; then echo '[entry] first boot — creating db from template'; cp /app/db/schema.db /app/db/custom.db; fi; exec bun /app/server.js"]
+# first boot: create the live db from the template, then serve;
+# instrumentation seeds settings + admin in the background and starts the SMPP gateway on :2775
+CMD ["sh", "-c", "mkdir -p /app/db; if [ ! -f /app/db/custom.db ]; then echo '[entry] first boot — creating db from template'; cp /app/db-template/schema.db /app/db/custom.db; fi; exec node /app/server.js"]

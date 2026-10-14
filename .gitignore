@@ -24,3 +24,5 @@ scripts/report_final.pdf
 scripts/report_numbered.pdf
 *.log
 .DS_Store
+scripts/prod-creds.json
+scripts/gen-deploy-key.ts
