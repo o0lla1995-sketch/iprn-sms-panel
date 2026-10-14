@@ -1,5 +1,7 @@
 generator client {
   provider = "prisma-client-js"
+  // embed engines for every plausible runtime so build/deploy images can differ
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x", "linux-arm64-openssl-1.1.x", "debian-openssl-1.1.x", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
