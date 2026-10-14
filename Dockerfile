@@ -15,8 +15,12 @@ WORKDIR /app
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
     PORT=3000 \
+    HOSTNAME=0.0.0.0 \
     DATABASE_URL=file:/app/db/custom.db
 EXPOSE 3000 2775
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
+  CMD node -e "fetch('http://127.0.0.1:3000/login').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
 
 # standalone server incl. traced node_modules (prisma client, bcryptjs, …)
 COPY --from=build /app/.next/standalone ./
