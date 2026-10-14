@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>دراسة شاملة للوحة الرسائل القصيرة SMS Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+@page { size: 720px 1020px; margin: 0; }
+:root {
+  --bg-page:#f5f8fc; --bg-section:#edf2f9; --bg-card:#e4ecf5; --stripe:#eef3fa;
+  --thead:#1a4a7a; --border:#c0d0e2; --accent:#2d7ab3; --text:#142840; --muted:#5a7a96;
+  --cv-bg:#0a1628; --cv-accent:#4da8da; --cv-title:#e8f0f8; --cv-muted:#7a9bb8; --cv-glow:#2d7ab3;
+}
+html, body {
+  margin:0; padding:0; width:720px; background:#f5f8fc; color:#142840;
+  font-family:'Cairo','Tajawal',sans-serif; font-size:15px; line-height:1.85;
+  line-break:strict; word-break:normal; overflow-wrap:break-word;
+}
+@media screen {
+  html { height:auto; display:flex; justify-content:center; background:#1c2733; }
+  body { margin:14px auto; transform-origin:top center; scale:min(1, calc(100vw / 720)); box-shadow:0 0 40px rgba(0,0,0,.35); }
+}
+
+/* ===== Cover (Template 07 Crystal Blue — RTL mirror) ===== */
+.cover {
+  width:720px; height:1020px; position:relative; box-sizing:border-box;
+  background:
+    radial-gradient(circle at 84% 16%, rgba(45,122,179,.08), transparent 52%),
+    radial-gradient(circle at 14% 86%, rgba(45,122,179,.07), transparent 52%),
+    #0a1628;
+  color:#e8f0f8;
+}
+.cv-frame { position:absolute; top:80px; bottom:80px; left:60px; right:60px; border:2px solid #4da8da; }
+.cv-kicker { position:absolute; top:124px; right:92px; font-size:13px; font-weight:600; color:#4da8da; }
+.cv-title  { position:absolute; top:196px; right:92px; width:540px; font-size:51px; font-weight:900; line-height:1.2; color:#e8f0f8; }
+.cv-sum    { position:absolute; top:468px; right:92px; width:520px; font-size:18px; line-height:1.8; color:#7a9bb8; }
+.cv-org    { position:absolute; top:672px; right:92px; width:540px; }
+.cv-org-main { font-size:17px; font-weight:700; color:#e8f0f8; }
+.cv-org-sub  { font-size:13px; color:#7a9bb8; margin-top:4px; }
+.cv-date   { position:absolute; bottom:118px; right:92px; font-size:12.5px; color:#7a9bb8; }
+
+/* ===== Flow / pagination ===== */
+.main-content { padding:54px 60px 44px; -webkit-box-decoration-break:clone; box-decoration-break:clone; }
+.toc { break-after:page; }
+
+/* ===== Typography ===== */
+h2 { font-size:22px; font-weight:800; color:#142840; line-height:1.45; margin:0; }
+h3 { font-size:16.5px; font-weight:700; color:#1a4a7a; margin:16px 0 8px; break-after:avoid; }
+h4 { font-size:14.5px; font-weight:700; color:#1a4a7a; margin:12px 0 6px; break-after:avoid; }
+p  { margin:0 0 10px; text-align:justify; }
+ul,ol { margin:4px 0 12px; padding-inline-start:22px; }
+li { margin-bottom:5px; text-align:start; break-inside:avoid; }
+strong { color:#1a4a7a; font-weight:700; }
+code.i { font-family:'JetBrains Mono','DejaVu Sans Mono',monospace; font-size:.86em; color:#1a4a7a; background:#eef3fa; border:1px solid #c0d0e2; border-radius:4px; padding:0 5px; direction:ltr; unicode-bidi:embed; }
+
+/* ===== Chapter header ===== */
+.chapter-header { break-after:avoid; break-inside:avoid; margin-top:26px; padding-top:6px; }
+.chapter-header.first { margin-top:0; }
+.sec-chip { display:inline-block; background:#1a4a7a; color:#fff; font-size:11.5px; font-weight:700; border-radius:4px; padding:1px 10px 2px; margin-bottom:6px; letter-spacing:0; }
+.sec-divider { width:64px; height:3px; background:#2d7ab3; margin-top:10px; border-radius:2px; }
+
+/* ===== Cards & callouts ===== */
+.card { background:#e4ecf5; border:1px solid #c0d0e2; border-radius:8px; padding:13px 16px; margin-bottom:14px; break-inside:avoid; }
+.note { background:#edf2f9; border-inline-start:3px solid #2d7ab3; border-radius:6px; padding:10px 14px; margin:10px 0 14px; font-size:13.5px; line-height:1.75; break-inside:avoid; }
+.note b { color:#1a4a7a; }
+
+/* ===== Stat grid ===== */
+.stat-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:12px 0 16px; }
+.stat { background:#e4ecf5; border-top:3px solid #2d7ab3; border-radius:8px; padding:10px 12px; break-inside:avoid; }
+.stat b { display:block; font-size:19px; font-weight:800; color:#1a4a7a; line-height:1.3; }
+.stat span { font-size:11.3px; color:#5a7a96; line-height:1.5; display:block; }
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:10px 0 14px; }
+.grid2 > * { margin-bottom:0; break-inside:avoid; }
+
+/* ===== Tables ===== */
+.tbl-wrap { break-inside:avoid; margin:10px 0 16px; }
+.tbl-wrap.splittable { break-inside:auto; }
+.tbl-cap { font-size:12px; color:#5a7a96; margin:0 0 6px; font-weight:600; }
+table.tbl { width:100%; border-collapse:collapse; font-size:12.3px; line-height:1.55; }
+table.tbl thead { display:table-header-group; }
+table.tbl tr { break-inside:avoid; }
+.tbl th { background:#1a4a7a; color:#fff; font-weight:600; padding:6px 9px; font-size:11.8px; text-align:start; border:1px solid #1a4a7a; }
+.tbl td { padding:5px 9px; border:1px solid #c0d0e2; vertical-align:top; background:#fff; }
+.tbl tbody tr:nth-child(odd) td { background:#eef3fa; }
+
+/* ===== Code ===== */
+.code { direction:ltr; text-align:left; font-family:'JetBrains Mono','DejaVu Sans Mono',monospace; font-size:11.3px; line-height:1.65; background:#eef3fa; border:1px solid #c0d0e2; border-radius:6px; padding:11px 14px; margin:10px 0 14px; white-space:pre-wrap; overflow-wrap:break-word; break-inside:avoid; color:#142840; }
+.code .c { color:#5a7a96; }
+.code .k { color:#1a4a7a; font-weight:700; }
+
+/* ===== TOC ===== */
+.toc-title { font-size:26px; font-weight:800; color:#142840; margin:4px 0 2px; }
+.toc-sub { font-size:12.5px; color:#5a7a96; margin-bottom:18px; }
+.toc-row { display:flex; align-items:baseline; font-size:14.5px; margin-bottom:11px; }
+.toc-chip { font-family:'JetBrains Mono','DejaVu Sans Mono',monospace; font-size:11px; color:#2d7ab3; font-weight:700; margin-inline-end:9px; }
+.toc-name { font-weight:600; color:#142840; }
+.toc-dots { flex:1; border-bottom:1px dotted #c0d0e2; margin:0 10px; height:.85em; }
+.toc-pg { font-family:'JetBrains Mono','DejaVu Sans Mono',monospace; font-size:12px; font-weight:700; color:#1a4a7a; min-width:22px; text-align:left; }
+.toc-hint { margin-top:20px; }
+
+/* ===== Flow diagram ===== */
+.flow-box { background:#fff; border:1px solid #c0d0e2; border-radius:8px; padding:10px 8px 6px; margin:12px 0 4px; break-inside:avoid; }
+.flow-cap { text-align:center; font-size:11.5px; color:#5a7a96; margin:4px 0 14px; }
+svg text { font-family:'Cairo','Tajawal',sans-serif; }
+
+/* ===== Page badge (tour) ===== */
+.pg-badge { display:inline-block; background:#e4ecf5; border:1px solid #c0d0e2; color:#1a4a7a; font-family:'JetBrains Mono','DejaVu Sans Mono',monospace; font-size:10.5px; font-weight:700; border-radius:4px; padding:0 8px 1px; margin-inline-start:8px; vertical-align:2px; direction:ltr; }
+.state-line { font-size:13px; background:#edf2f9; border-radius:6px; padding:8px 12px; margin:8px 0 14px; break-inside:avoid; }
+.state-line b { color:#1a4a7a; }
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<div class="cover">
+  <div class="cv-frame"></div>
+  <div class="cv-kicker">تقرير دراسة تقنية شاملة</div>
+  <div class="cv-title">دراسة شاملة<br>للوحة الرسائل القصيرة</div>
+  <div class="cv-sum">دراسة تحليلية متكاملة للوحة الرسائل القصيرة SMS Platform التابعة لخدمة Careful Support: تعريف المنصة ونموذج عملها ثنائي الجانب، وشرح مفصّل لصفحاتها الاثنتي عشرة، وآلية تدفق الترافيك عبر بروتوكولي SMPP وHTTP، مع تحليل كامل لحالة الحساب، وخطة متطلبات التفعيل والمهام المطلوبة خطوة بخطوة.</div>
+  <div class="cv-org">
+    <div class="cv-org-main">بوابة الدخول: sms.carefulsupport.com</div>
+    <div class="cv-org-sub">الحساب المدروس: Abass — رقم #25 — دور المورد (Supplier/Vendor)</div>
+  </div>
+  <div class="cv-date">14 أكتوبر 2026</div>
+</div>
+
+<!-- ============ MAIN CONTENT ============ -->
+<div class="main-content">
+
+<!-- ===== TOC ===== -->
+<div class="toc">
+  <div class="toc-title">فهرس المحتويات</div>
+  <div class="toc-sub">دراسة شاملة للوحة الرسائل القصيرة SMS Platform — بوابة sms.carefulsupport.com</div>
+  <div class="toc-row"><span class="toc-chip">§01</span><span class="toc-name">الملخص التنفيذي</span><span class="toc-dots"></span><span class="toc-pg" data-sec="01">1</span></div>
+  <div class="toc-row"><span class="toc-chip">§02</span><span class="toc-name">ما هي المنصة؟ التعريف والهوية ونطاق الخدمة</span><span class="toc-dots"></span><span class="toc-pg" data-sec="02">2</span></div>
+  <div class="toc-row"><span class="toc-chip">§03</span><span class="toc-name">كيف تعمل المنصة؟ نموذج العمل والمسارات المالية</span><span class="toc-dots"></span><span class="toc-pg" data-sec="03">3</span></div>
+  <div class="toc-row"><span class="toc-chip">§04</span><span class="toc-name">البنية الفنية للاتصال: SMPP وHTTP والاتجاهان</span><span class="toc-dots"></span><span class="toc-pg" data-sec="04">5</span></div>
+  <div class="toc-row"><span class="toc-chip">§05</span><span class="toc-name">جولة تفصيلية في صفحات اللوحة الاثنتي عشرة</span><span class="toc-dots"></span><span class="toc-pg" data-sec="05">6</span></div>
+  <div class="toc-row"><span class="toc-chip">§06</span><span class="toc-name">محور الإرسال بالتفصيل: كيف ينساب الترافيك؟</span><span class="toc-dots"></span><span class="toc-pg" data-sec="06">12</span></div>
+  <div class="toc-row"><span class="toc-chip">§07</span><span class="toc-name">حالة الحساب الحالية: النتائج والمشاهدات</span><span class="toc-dots"></span><span class="toc-pg" data-sec="07">14</span></div>
+  <div class="toc-row"><span class="toc-chip">§08</span><span class="toc-name">قاموس المصطلحات</span><span class="toc-dots"></span><span class="toc-pg" data-sec="08">16</span></div>
+  <div class="toc-row"><span class="toc-chip">§09</span><span class="toc-name">المطلوب (1): متطلبات التفعيل والتشغيل</span><span class="toc-dots"></span><span class="toc-pg" data-sec="09">18</span></div>
+  <div class="toc-row"><span class="toc-chip">§10</span><span class="toc-name">المطلوب (2): خطة المهام العملية والتوصيات</span><span class="toc-dots"></span><span class="toc-pg" data-sec="10">20</span></div>
+  <div class="note toc-hint"><b>كيف تقرأ هذا التقرير:</b> القسم §01 يختصر كل شيء في صفحة واحدة لمن يستعجل. الأقسام §02–§04 تشرح «ما هي اللوحة وكيف تعمل»، والقسمان §05–§06 يفصّلان «جميع الصفحات وما تحتويه» مع تركيز خاص على محور الإرسال. الأقسام §07–§10 تجيب عن سؤال «ما المطلوب فيها»: أين يقف حسابك الآن، وما هي متطلبات التفعيل، وما المهام العملية المطلوبة منك مرتبة بالأولوية. أرقام الصفحات في الفهرس تشير إلى ترقيم المتن الذي يبدأ من 1 بعد هذه الصفحة.</div>
+</div>
+
+<!-- ===== §01 الملخص التنفيذي ===== -->
+<div class="chapter-header first" id="sec01">
+  <div class="sec-chip">§01</div>
+  <h2>الملخص التنفيذي</h2>
+  <div class="sec-divider"></div>
+</div>
+<p>اللوحة المدروسة هي <strong>SMS Platform</strong>، بوابة ويب تحليلية وتشغيلية تقدمها خدمة <strong>Careful Support</strong> عبر العنوان <code class="i">sms.carefulsupport.com</code>. وهي ليست لوحة رسائل تسويقية تقليدية لإرسال رسائل جماعية، بل <strong>منصة تبادل ترافيك رسائل قصيرة بالجملة وبالتعرفة المميزة</strong> (Wholesale + Premium Rate): سوقٌ وسيط يربط طرفين على نفس الترافيك، وينقل الرسائل الصادرة والواردة (MT/MO) عبر موصلات <strong>SMPP 3.4</strong> و<strong>HTTP</strong> فقط، دون أي دعم للواتساب أو الصوت أو RCS أو البريد. تمت الدراسة بتسجيل الدخول الفعلي إلى الحساب واستكشاف الصفحات الاثنتي عشرة كاملة، بما فيها النماذج والجداول والإشعارات ومساعد الدعم المدمج.</p>
+<p>حسابك في هذه المنصة (<strong>Abass، رقم #25، حالة ACTIVE</strong>) مسجل في <strong>جانب المورد/المزوّد (Supplier/Vendor)</strong> لا في جانب العميل. المعنى العملي لهذا الدور: أنت من يمدّ الأرقام (DIDs) ويزوّد الاتصال الذي يحمل الترافيك، والمنصة تدفع لك <strong>تعرفة تسوية</strong> عن كل رسالة تحملها، على مسارات PRN وWHOLESALE على حد سواء. أما العملاء فيستأثرون بالأرقام ويرسلون ويستقبلون عبرها ويُحاسبون بتعرفة الإرسال، والفرق بين التعرفتين هو هامش المنصة. وعليه فإن «الإرسال» من منظور حسابك يعني أساسًا <strong>استقبال الترافيك الذي توجّهه المنصة إلى خادمك عبر SMPP</strong>، وإرجاع إيصالات التسليم (DLR) لها، إضافة إلى إمكانية إرسال ترافيك إليها عبر ربط SMPP وارد أو HTTP API.</p>
+<p>أبرز نتيجة في الدراسة أن الحساب <strong>قائم الهيكل لكنه خالٍ من الحركة</strong>: الرصيد 0.0000 دولار، لا مسارات تسوية مخصصة («No routes assigned to you yet»)، لا أرقام ممدّدة حالياً (فلتر Mine يظهر صفراً)، لا فواتير، ولا تذاكر دعم. وتتوالى إشعارات يومية عن فشل الموصل رقم <strong>#34</strong> إلى خادمك <code class="i">vemail.pp.ua:2775</code> (system_id 450) بخطأ <strong>ETIMEOUT</strong> منذ 30 سبتمبر 2026 الساعة 18:24 بتوقيت UTC — أي أكثر من 312 ساعة متواصلة حتى آخر إشعار بتاريخ 13 أكتوبر — بينما تظهر واجهة الموصلات الحالية «No connectors yet»، ويربط الإشعار الخاص بالرسائل المنتهية (EXPIRED SMS) المسؤولية عليك صراحة: <strong>لا بد من إرسال إيصالات تسليم لكل الترافيك وإلا انتهت صلاحيته بتسعيرة 0.0000 خلال 24 ساعة</strong>. كما بيّن مساعد الدعم الرسمي أن العائقين الحقيقيين هما: عدم وجود أرقام ممدّدة (لا يُوجَّه إليك أي ترافيك بدونها)، وسقوط الاتصال الخارجي نحو خادمك.</p>
+<p>خلاصة «ما المطلوب فيها» على مسارين متوازيين: <strong>مسار متطلبات التفعيل</strong> — إعادة تشغيل خادم SMPP على المنفذ 2775 والسماح للمنصة بالوصول من IP الثابت <code class="i">35.224.28.251</code> عبر جدار الحماية، والتحقق من DNS لـ vemail.pp.ua، ثم إعادة إنشاء الموصل من نموذج صفحة Outbound Connectors؛ و<strong>مسار المهام داخل الحساب</strong> — تمديد أرقام من صفحة Numbers أو أزرار Allocate في قائمة الوصول، متابعة إسناد المسارات وأسعار التسوية أو رفع قائمة أسعار CSV/XLSX لمراجعة المشغل، تعبئة بيانات السحب المالي واختيار دورة الفوترة، وضبط تنبيهات الاستخدام. الحد الأدنى للدفع 200 دولار أمريكي، والدورة الأسبوعية (Weekly Factoring) توفر خصمًا بنسبة 30% مقارنة بالشهرية. التفاصيل الكاملة مرتبة بالأولوية في القسمين §09 و§10.</p>
+<div class="stat-grid">
+  <div class="stat"><b>Abass · #25</b><span>الحساب: نشط، دور المورد/Supplier</span></div>
+  <div class="stat"><b>0.0000 $</b><span>الرصيد الحالي — حد الدفع 200$</span></div>
+  <div class="stat"><b>21 إشعارًا</b><span>18 جديدًا — أغلبها فشل الموصل #34</span></div>
+  <div class="stat"><b>79+ يومًا</b><span>بلا أي ترافيك على الحساب (حتى 9/5)</span></div>
+</div>
+
+<!-- ===== §02 ما هي المنصة ===== -->
+<div class="chapter-header" id="sec02">
+  <div class="sec-chip">§02</div>
+  <h2>ما هي المنصة؟ التعريف والهوية ونطاق الخدمة</h2>
+  <div class="sec-divider"></div>
+</div>
+<p>التعريف الرسمي الذي يقدمه مساعد المنصة عن نفسها — وهو ما تؤكده بنية الصفحات والبيانات الفعلية — أنها <strong>«منصة رسائل جملة وتعرفة مميزة (Wholesale and Premium-Rate PRN SMS Messaging Platform)»</strong>، تنقل حركة الرسائل القصيرة فقط: رسائل صادرة (MT) وواردة (MO) على أرقام هواتف، تسلَّم عبر موصلات SMPP وHTTP. البوابة هي مكان إدارة كل ما يخص هذه الحركة: الأرقام، والموصلات، وسجلات الرسائل (CDRs)، والفوترة، والأسعار. المنصة لا تتعامل مع واتساب أو مكالمات صوتية أو RCS أو بريد إلكتروني — الرسائل القصيرة فقط — وهذا التخصص يفسر عمق الصفحات المحاسبية فيها بدل صفحات «الحملات التسويقية» المعتادة في لوحات الإرسال الجماعي.</p>
+<p>هوية الخدمة تظهر في تفاصيل ثلاث: الاسم التجاري للبوابة <strong>SMS Platform</strong> بعنوان <code class="i">sms.carefulsupport.com</code>، والنطاق <code class="i">carefulsupport.com</code> الذي يشير إلى جهة التشغيل، والبنية الثابتة للاتصال التي تعلنها المنصة للجميع بلا استثناء: عنوان IP موحّد <code class="i">35.224.28.251</code> تخرج منه كل اتصالات SMPP ودفعات HTTP الواردة، ومنفذ SMPP موحّد <strong>2775</strong> بإصدار البروتوكول <strong>3.4</strong> مع أنماط الربط TRX/TX/RX، ونقطة نهاية HTTP على <code class="i">https://sms.carefulsupport.com</code>. هذا الثبات يقصد منه حماية الطرفين: يعرف كل مورد أي IP يجب أن يسمح به في جدار حمايته، ويعرف كل عميل أي نقطة يرتبط بها.</p>
+<p>بوابة الدخول نفسها صفحة مكتملة الوظائف، وتشمل أربع قدرات إلى جانب تسجيل الدخول بالبريد وكلمة المرور: استعادة كلمة المرور (Forgot password)، وإنشاء حساب جديد (Create account)، و<strong>الدخول بمفتاح API</strong> (Use API key) لمن يريد الولوج برمجيًا دون بيانات الحساب — وهو ما يتسق مع طبيعة المنصة التي يتعامل معها كثيرون بأنظمة آلية لا بمتصفح. بعد الدخول تتغير الصفحة إلى مساحة عمل من اثنتي عشرة صفحة يغلفها قائمة جانبية واحدة: لوحة المعلومات (Dashboard) بعدّاد إشعارات، الرسائل الصادرة، الموصلات الصادرة، أسعار التسوية، قوائم الأسعار، الأرقام، سجل الإصدارات، الملفات، قائمة الوصول، الموصلات الواردة، الفوترة، والدعم.</p>
+<p>مستخدمًا واحدًا في هذه المنصة يمكن أن يظهر فيها بدورين مختلفين تمامًا على نفس الأرقام، وهذا جوهر فهم اللوحة كله: <strong>العميل (Client)</strong> يستأثر بالأرقام المتاحة ليملكها (Claim)، فيرسل الرسائل الصادرة ويستقبل الواردة على أرقامه، ويرى <strong>تعرفة الإرسال</strong> ويُحاسب عليها. و<strong>المورد (Vendor/Supplier)</strong> — وهو دور حسابك — يمدّ الأرقام (Source) ليزود ترافيكها، ويوفر الاتصال الذي يحمل هذا الترافيك، ويرى <strong>تعرفة التسوية</strong>: ما تدفعه المنصة إليه. الاستئثار والتمديد فعلان مستقلان تمامًا على نفس الرقم، والمنصة هي الوسيط الذي يقف بين الطرفين ويحاسب كلًّا منهما بتعرفته الخاصة، وتبقى التعرفة المقابلة مخفية عن كل طرف («الجهة الأخرى تبقى مخفية» كما تصفها صفحة الأرقام).</p>
+
+<!-- ===== §03 كيف تعمل ===== -->
+<div class="chapter-header" id="sec03">
+  <div class="sec-chip">§03</div>
+  <h2>كيف تعمل المنصة؟ نموذج العمل والمسارات المالية</h2>
+  <div class="sec-divider"></div>
+</div>
+<p>يبدأ فهم آلية العمل من اتجاهين للتدفق يلتقيان في المنصة. <strong>اتجاه الترافيك</strong>: الرسائل تتدفق من العملاء إلى المنصة، ومن المنصة إليك أيها المورد لتسليمها عبر بنيتك أنت (خادم SMPP يربط المنصة إليه، أو نقطة HTTP)، ثم تعود <strong>إيصالات التسليم (DLR)</strong> منك إلى المنصة لتُقفل دورة كل رسالة. <strong>واتجاه المال</strong>: العميل يُحاسب بتعرفة الإرسال على كل رسالة، والمنصة تدفع لك تعرفة التسوية عن كل رسالة تحملها، ويبقى الفرق هامش الوساطة. هذا النموذج يفسر كل صفحات اللوحة: صفحات «الصادر» تحسب ما يُستحق لك (جانب الدائنين AP في الفوترة)، وصفحات الفوترة تنظّم دورات الإقفال والسحب، وصفحة أسعار التسوية هي بطاقة أتعابك أنت المورد.</p>
+<div class="flow-box">
+<svg viewBox="0 0 640 200" width="640" height="200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="8" refX="7.5" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#2d7ab3"/></marker>
+    <marker id="ahm" markerWidth="9" markerHeight="8" refX="7.5" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#5a7a96"/></marker>
+  </defs>
+  <!-- nodes: client (right), platform (middle), vendor (left) -->
+  <rect x="470" y="26" width="164" height="74" rx="8" fill="#e4ecf5" stroke="#c0d0e2"/>
+  <rect x="470" y="26" width="164" height="4" rx="2" fill="#2d7ab3"/>
+  <text x="552" y="55" text-anchor="middle" font-size="14.5" font-weight="700" fill="#142840">العملاء (Clients)</text>
+  <text x="552" y="76" text-anchor="middle" font-size="10.5" fill="#5a7a96">يستأثرون الأرقام ويرسلون MT</text>
+  <text x="552" y="92" text-anchor="middle" font-size="10.5" fill="#5a7a96">ويستقبلون MO — تعرفة الإرسال</text>
+
+  <rect x="238" y="26" width="164" height="74" rx="8" fill="#e4ecf5" stroke="#c0d0e2"/>
+  <rect x="238" y="26" width="164" height="4" rx="2" fill="#2d7ab3"/>
+  <text x="320" y="55" text-anchor="middle" font-size="14.5" font-weight="700" fill="#142840">المنصة SMS Platform</text>
+  <text x="320" y="76" text-anchor="middle" font-size="10.5" fill="#5a7a96">وسيط: تسعير وتسوية وفوترة</text>
+  <text x="320" y="92" text-anchor="middle" font-size="10.5" fill="#5a7a96">35.224.28.251 : 2775</text>
+
+  <rect x="6" y="26" width="164" height="74" rx="8" fill="#e4ecf5" stroke="#c0d0e2"/>
+  <rect x="6" y="26" width="164" height="4" rx="2" fill="#2d7ab3"/>
+  <text x="88" y="55" text-anchor="middle" font-size="14.5" font-weight="700" fill="#142840">أنت — المورد (Supplier)</text>
+  <text x="88" y="76" text-anchor="middle" font-size="10.5" fill="#5a7a96">تمدّ الأرقام (Source)</text>
+  <text x="88" y="92" text-anchor="middle" font-size="10.5" fill="#5a7a96">وتوفر الاتصال — تعرفة التسوية</text>
+
+  <!-- client -> platform (right to left) -->
+  <line x1="466" y1="52" x2="408" y2="52" stroke="#2d7ab3" stroke-width="2" marker-end="url(#ah)"/>
+  <text x="437" y="42" text-anchor="middle" font-size="10" fill="#1a4a7a" font-weight="600">ترافيك MT/MO</text>
+  <!-- platform -> you -->
+  <line x1="234" y1="52" x2="176" y2="52" stroke="#2d7ab3" stroke-width="2" marker-end="url(#ah)"/>
+  <text x="205" y="42" text-anchor="middle" font-size="10" fill="#1a4a7a" font-weight="600">تسليم عبر SMPP</text>
+  <!-- you -> platform : DLR return (dashed, below) -->
+  <path d="M170 78 C 150 118, 60 118, 40 84" fill="none" stroke="#5a7a96" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#ahm)"/>
+  <text x="105" y="128" text-anchor="middle" font-size="10" fill="#5a7a96">إيصالات التسليم DLR (إلزامية)</text>
+  <!-- money: platform -> you (bottom lane) -->
+  <line x1="240" y1="176" x2="120" y2="176" stroke="#2d7ab3" stroke-width="2" stroke-dasharray="2,0" marker-end="url(#ah)"/>
+  <text x="205" y="168" text-anchor="middle" font-size="10" fill="#1a4a7a" font-weight="600">تعرفة التسوية $ / رسالة</text>
+  <text x="330" y="176" text-anchor="middle" font-size="10" fill="#5a7a96">حسابك: جانب الدائنين (AP)</text>
+</svg>
+</div>
+<div class="flow-cap">المخطط 1: نموذج التدفق ثنائي الجانب — الترافيك من اليمين إلى اليسار، والمال يتقاضاه المورد من المنصة، وإيصالات التسليم تعود من المورد إلى المنصة.</div>
+<h3>نموذجا الفوترة: PRN وWHOLESALE</h3>
+<p>تسعّر المنصة أرقامها ومساراتها بنموذجين اثنين يحددان كل شيء تقريبًا في شؤون التعرفة. <strong>PRN (Premium Rate Number)</strong> هو نموذج التعرفة المميزة: أرقام تُسعَّر بتعاريف أعلى ويُتقاسم ريعها، وتحمل أعلى معدلات دفع للمورد، وقد تخضع لضابط تسوية إضافي يسمى <strong>CR</strong> (Confirmation of Reception — تأكيد الاستلام): فبعض النطاقات المميزة «بوابة CR» (تظهر بصيغ A2P-CR / P2P-CR / BOTH-CR) لا يُدفع لك مقابلها إلا بعد تأكيد التسليم عبر رمز (token) يعاد ضمن نافذة زمنية، بينما يُحاسب العميل بالتعرفة الاعتيادية عند التسليم بغض النظر عن ذلك — أي أن علم CR هو أداة ضبط لتسوية المورد وحده. أما <strong>WHOLESALE</strong> فهو نموذج الرسائل الجملية الاعتيادية (تسويقية أو تحقق/OTP) بأسعار الجملة، وهو النموذج الذي يحمل ملف حسابك الوحيد حاليًا اسمه (الملف WHOLESALE برمز WSALE).</p>
+<p>التعرفتان منفصلتان لكل نموذج ولكل اتجاه ولكل طرف، ولهذا ينبغي عند أي نقاش تسعيري أن يُحدَّد دائمًا: أي نموذج (PRN أم WHOLESALE)، وأي جهة (إرسال العميل أم تسوية المورد)، وأي اتجاه (MT أم MO). عمود <code class="i">Class</code> في سجلات الرسائل يبين فئة الترافيك (A2P تطبيقي، P2P شخصي، BOTH كلاهما)، وعلم <code class="i">CR</code> فيها يبين خضوع الرسالة لضابط تأكيد الاستلام. وحين جرى اختبار التسعير التجريبي (dry-run) خلال الدراسة على رقمين (بريطاني وجزائري) أجابت المنصة في الحالتين بـ <code class="i">has_route: false</code> و<code class="i">rating_source: none</code> — وهذا دليل قاطع من داخل النظام على أن حسابك بلا أي مسار تسعيري مخصص حاليًا، فالرسائل إلى أي وجهة ستُسعَّر صفرًا حتى تُسند إليك المسارات.</p>
+<h3>قواعد التشغيل المفروضة على المورد</h3>
+<p>يخضع دور المورد لثلاث قواعد صارمة تكررت في نصوص اللوحة نفسها. <strong>أولًا — إيصالات التسليم إلزامية:</strong> الإشعار الرسمي (EXPIRED SMS بتاريخ 13/10) يقول نصًا: «في حالة الموصل SMPP المستخدم لتمرير الترافيك إلى خادمك، تأكد من إرسال إيصالات التسليم على كل رسائل الترافيك وإلا ستنتهي صلاحيتها بتسعيرة 0.0000 خلال 24 ساعة». أي أن الرسالة التي تحملها ولا تعيد لها DLR تُقفل بصفر بعد يوم، فتضيع قيمتها عنك بالكامل. <strong>ثانيًا — التخصيص التلقائي للأرقام:</strong> الرقم الذي تمده ولا يستقبل أي رسالة واردة لمدة 7 أيام يُسحب من حسابك تلقائيًا (وتصلك رسالة بريدية قبل 3 أيام)، وأي رسالة واردة تصفّر العداد من جديد؛ عمود «آخر ترافيك» في صفحة الأرقام يبين المتبقي لكل رقم من أرقامك. <strong>ثالثًا — الفوترة دورية:</strong> تُولَّد فاتورة عن كل دورة مقفلة، والمبالغ التي تحملها تراكم في رصيدك حتى تبلغ حد السحب، وتُدفع لك وفق بيانات السحب التي تعبئها في صفحة الفوترة.</p>
+<div class="note"><b>خلاصة القسم:</b> أنت لست «مرسلاً» في هذه المنصة بالمعنى الشائع؛ أنت <b>حامل الترافيك</b>. المنصة توجّه إليك ما استؤثر من أرقام، وتدفع لك عن كل رسالة تحملها وتعيد لها إيصالها. ميزانيتك تُبنى من ثلاثة: أرقام تمدها، ومسارات تُسند إليك بتعرفة تسوية، وموصل يعمل بلا انقطاع — وحسابك اليوم فارغ من الثلاثة، وسيأتي تفصيل ذلك في القسم §07.</div>
+
+<!-- ===== §04 البنية الفنية ===== -->
+<div class="chapter-header" id="sec04">
+  <div class="sec-chip">§04</div>
+  <h2>البنية الفنية للاتصال: SMPP وHTTP والاتجاهان</h2>
+  <div class="sec-divider"></div>
+</div>
+<p>كل حركة في هذه المنصة تمر عبر أحد بروتوكولين فقط: <strong>SMPP 3.4</strong> (بروتوكول الرسائل القصيرة بين الأنظمة، وهو معيار الصناعة للترافيك الكثيف) أو <strong>HTTP</strong> بواجهة REST مفتوحة. والنقطة المفصلية التي يجب ترسيخها هي أن كلمة «موصل» تعني هنا شيئين مختلفين حسب الاتجاه، وصفحتا الموصلات تفتتحان كل منهما بعبارة توضيحية صريحة تحسم الالتباس: صفحة <strong>Outbound Connectors</strong> (الموصلات الصادرة، جانب المورد) هي «مراكز SMSC التي نرتبط بها خارجيًا لنوصلك الترافيك» — أي أن المنصة هي من يبادر بالاتصال نحو خادمك أنت. بينما صفحة <strong>Inbound Connectors</strong> (الموصلات الواردة) هي «كيف ترتبط أنت بنا»: بيانات اعتمادك أنت لإرسال الترافيك إلينا واستقبال الوارد، عبر ربط SMPP إلى بوابتنا أو بمفتاح HTTP. نفس IP المنصة، نفس المنفذ، لكن اتجاه المبادرة معكوس، وهذا هو الفارق العملي بين الصفحتين.</p>
+<div class="tbl-wrap">
+<div class="tbl-cap">الجدول 1: الثوابت الفنية للاتصال كما تعلنها المنصة (موحّدة للجميع)</div>
+<table class="tbl">
+<thead><tr><th>البند</th><th>القيمة</th><th>ملاحظة</th></tr></thead>
+<tbody>
+<tr><td>IP المنصة (المصدر الثابت)</td><td><code class="i">35.224.28.251</code></td><td>يخرج منه كل ربط SMPP وكل دفع HTTP — يجب السماح به في جدار حمايتك</td></tr>
+<tr><td>منفذ SMPP</td><td><code class="i">2775</code></td><td>بروتوكول SMPP 3.4، أنماط الربط TRX / TX / RX</td></tr>
+<tr><td>نقطة HTTP</td><td><code class="i">https://sms.carefulsupport.com</code></td><td>واجهة REST بمفتاح <code class="i">x-api-key</code> في ترويسة الطلب</td></tr>
+<tr><td>إرسال رسالة</td><td><code class="i">POST /v1/send</code></td><td>الحقول: to، from، text، dlr_url، client_msg_id</td></tr>
+<tr><td>خطاف الوارد (MO Webhook)</td><td><code class="i">PUT /v1/account/mo-webhook</code></td><td>يضبط عنوان استقبال نسخ المورد من الرسائل الواردة</td></tr>
+</tbody>
+</table>
+</div>
+<h3>المسار الأول: الموصلات الصادرة (من المنصة إليك)</h3>
+<p>لكي توصل لك المنصة الترافيك، تحتاج إلى نقطة نهاية عامة (Public Endpoint) على خادمك تعمل كمركز SMSC أو مستقبل HTTP. أنت من يحدد إعداداتها بالكامل في نموذج «إضافة موصل» بصفحة Outbound Connectors: <strong>المحوّل (Adapter)</strong> وافتراضه <code class="i">generic-smpp34</code>، و<strong>المستضيف (Host)</strong> — في حالتك كان <code class="i">vemail.pp.ua</code> — و<strong>المنفذ</strong> وافتراضه 2775، و<strong>system_id</strong> وكلمة المرور، و<strong>نمط الوارد MO</strong> بثلاث خيارات: <code class="i">SAME_BIND</code> (على نفس الربط) أو <code class="i">SEPARATE_RX</code> (ربط استقبال منفصل) أو <code class="i">HTTP_PUSH</code> (دفع HTTP)، و<strong>الملف (Profile)</strong>: إما «أي ملف» فيحمل الموصل بقية الترافيك، أو ملفًا محددًا مثل WHOLESALE فيحمل ترافيكه وحده. وتحتوي الصفحة على تنبيه أساسي: «عمليات ربط SMPP ودفعات MO إلى SMSC تخرج من هذا الـ IP — أضِفه إلى قائمة السماح في جدار الحماية عندك».</p>
+<h3>المسار الثاني: الموصلات الواردة (منك إلى المنصة)</h3>
+<p>في الاتجاه المقابل، أنت من يبادر. لـ SMPP: تختار أنت system_id وكلمة مرور من صفحة Inbound Connectors (يمكنك عدة روابط، كل واحدة بزوج مميز)، ثم يتصل خادمك بـ <code class="i">35.224.28.251:2775</code>. حسابك يملك ربطًا واحدًا مسجلًا حاليًا: <strong>system_id «450»</strong> بحالة «نشط» واتصال يظهر «Connecting» — أي أن الربط معرّف عند المنصة لكن لا جلسة حية قائمة عليه الآن. ولـ HTTP: مفتاح <code class="i">x-api-key</code> الخاص بك (يبدأ بـ <code class="i">vendor_cd322d8d…</code> — الجزء الباقي يظهر كاملاً في صفحتك ولا يُنشر في التقرير لأسباب أمنية) ترسله في ترويسة كل طلب إلى <code class="i">/v1/send</code>، ويمكن تدويره فورًا بزر Rotate، وقصر الطلبات على عناوين IP تسمح بها أنت في قائمة السماح (واحد أو نطاق CIDR في كل سطر، والفراغ يعني السماح للجميع — ولا يؤثر إطلاقًا على جلسة المتصفح). كذلك تدعم الصفحة <strong>خطاف الوارد (MO Webhook)</strong>: عنوان تُدفع إليه نسخة المورد من كل رسالة واردة على الأرقام التي تمدها، تحمل العلم <code class="i">role: "vendor_copy"</code> ويُعلَّم الترافيك التجريبي بـ <code class="i">simulated: true</code>؛ وتُسلَّم النسخ نفسها كرسائل على ربط SMPP الوارد متى كان متصلًا. حالتك الراهنة: الخطاف معطّل (لم يُضبط عنوان)، وهو ما يعني فقدان قناة استقبال كاملة كان يمكن أن تعمل حتى مع غياب موصل SMPP خارجي.</p>
+<div class="note"><b>ملاحظة مهمة من الواقع الحالي لحسابك:</b> أُنشئ في وقت سابق موصل خارجي إلى خادمك باسم الموصل <b>#34</b> (vemail.pp.ua:2775، system_id 450)، وهو يفشل بخطأ <b>ETIMEOUT</b> منذ 30 سبتمبر 2026 — 18:24 UTC. وتُظهر صفحة الموصلات حاليًا «No connectors yet — add one above»، أي أن الموصل لم يعد موجودًا في قائمتك، بينما ما زالت مراقبة صحة النظام ترسل إشعاراته اليومية. سأثرية تحليل ذلك وأسبابه وحلوله في القسمين §07 و§09.</div>
+
+<!-- ===== §05 جولة الصفحات ===== -->
+<div class="chapter-header" id="sec05">
+  <div class="sec-chip">§05</div>
+  <h2>جولة تفصيلية في صفحات اللوحة الاثنتي عشرة</h2>
+  <div class="sec-divider"></div>
+</div>
+<p>فيما يلي شرح مستوفى لكل صفحة من صفحات القائمة الجانبية الاثنتي عشرة كما وردت في الدراسة الفعلية: وظيفتها الرسمية، ومحتوياتها من أعمدة وحقول ونماذج، ثم «حالة حسابك» فيها تحديدًا. جميع الجداول في اللوحة تدعم بحثًا نصيًا بثلاثة أنماط مطابقة (Broad / Narrow / Exact) بدمج AND/OR، وتحكمًا بعدد الصفوف (100 إلى 10000 لكل صفحة)، وزر تصدير، وترقيمًا في الأسفل — ولذلك لن يُكرر ذكر هذه الأدوات في كل صفحة.</p>
+
+<h3>5.1 لوحة المعلومات — Dashboard <span class="pg-badge">sms.carefulsupport.com</span></h3>
+<p>هي الصفحة الافتتاحية بعد الدخول، وتجمع أربع بطاقات هوية للحساب في الأعلى: <strong>اسم الحساب</strong> (Abass)، <strong>رقم الحساب</strong> (#25)، <strong>الرصيد</strong> (0.0000)، و<strong>الحالة</strong> (ACTIVE). يليها سجل الإشعارات بعنوان «Notifications 18 new»، وهو جدول (التاريخ والوقت، اسم الإشعار، تفاصيل الإشعار) يمكن البحث فيه وفرزه، والنقر على أي صف يفتح نافذته التفصيلية بنصه الكامل وزر إغلاق. الإشعارات هي القناة التي تخاطبك بها المنصة: صحة الموصلات، انتهاء الرسائل، الأرقام الجديدة، التعرفات الجديدة، حساب «الهادئ» بلا ترافيك، وقوائم الوصول المميزة.</p>
+<div class="state-line"><b>حالة حسابك:</b> رصيد 0.0000 دولار · 21 إشعارًا (18 جديدًا) أحدثها إشعارات فشل الموصل اليومية وإشعار EXPIRED SMS، وأقدمها إشعار تعرفات PRN بتاريخ 3 سبتمبر.</div>
+
+<h3>5.2 الرسائل الصادرة — Outbound Messages <span class="pg-badge">جانب المورد</span></h3>
+<p>العنوان الرسمي للصفحة يختصر دورها: «الرسائل التي وجهناها إليك — انقر صفًا لسجل التسليم». هذا هو سجل CDR الخاص بترافيكك أنت: كل رسالة موجهت إليك عبر موصل خارجي تظهر هنا بصف واحد يحمل أعمدة <strong>الاتجاه</strong> (Dir: رسائل صادرة MT أو واردة MO، مع مرشح ALL/MT/MO)، <strong>المرسل</strong> (From)، <strong>المستقبل</strong> (To)، <strong>القطع</strong> (Seg)، <strong>الفئة</strong> (Class)، <strong>علم CR</strong>، <strong>معرف الرسالة عند المورد</strong> (Vendor msg id)، <strong>التكلفة</strong> (Cost)، <strong>الحالة</strong> (Status)، و<strong>الوقت</strong>. وتوضح الصفحة أن المبالغ هي «ما يُستحق لك (تكلفة المورد) — تُسوى في جانب الدائنين AP من الفوترة».</p>
+<div class="state-line"><b>حالة حسابك:</b> الجدول فارغ تمامًا (لا صفوف) — انعكاس مباشر لغياب الترافيك: لا موصل خارجي قائم، ولا أرقام ممدّدة، ولا مسارات مسندة.</div>
+
+<h3>5.3 الموصلات الصادرة — Outbound Connectors <span class="pg-badge">منصة ← خادمك</span></h3>
+<p>صفحة إعداد القناة التي تسلّمك المنصة الترافيك عبرها. تعرض ثوابت المنصة (IP 35.224.28.251، SMPP 3.4 / HTTP) ثم نموذج إضافة موصل بحقول سبعة: المحوّل generic-smpp34، المستضيف، المنفذ 2775، system_id، كلمة المرور، نمط MO (SAME_BIND / SEPARATE_RX / HTTP_PUSH)، والملف (أي ملف / WHOLESALE) مع شرح: «الموصل المرتبط بملف يحمل ترافيك ذلك الملف وحده؛ "أي ملف" يحمل الباقي». تحت النموذج تُعرض قائمة موصلاتك القائمة مع أدوات تعطيلها وحذفها.</p>
+<div class="state-line"><b>حالة حسابك:</b> «No connectors yet — add one above» — لا يوجد أي موصل قائم، رغم استمرار إشعارات الفشل اليومية عن الموصل القديم #34 (راجع §07).</div>
+
+<h3>5.4 أسعار التسوية — Settlement Rates <span class="pg-badge">أتعاب المورد</span></h3>
+<p>صفحة بطاقة أتعابك: «المسارات التي ترسل إليك الترافيك — تعرفة المورد الخاصة بك. يُدفع لك هذا المعدل عن كل رسالة تحملها، على مسارات WHOLESALE وPRN على حد سواء». الجدول الأول (Prefix، معدل المورد، النموذج، التسوية، التنفيذ) يعرض المسارات المسندة إليك فعلاً. والجدول الثاني — وهو الأوسع — يعرض <strong>كل الأرقام في النظام مجمعة حسب الوجهة/النموذج/الفئة/المعدل</strong> (208 مجموعات على 3 صفحات) مع عدد الأرقام في كل مجموعة وزر Allocate يفتح صفحة الأرقام لتمديدها. فيما يلي عينة تمثيلية من هذه المجموعات كما وردت في الدراسة:</p>
+<div class="tbl-wrap splittable">
+<div class="tbl-cap">الجدول 2: عينة من «كل الأرقام في النظام» (مجمّعة حسب الوجهة) — من صفحة أسعار التسوية</div>
+<table class="tbl">
+<thead><tr><th>الوجهة</th><th>النموذج</th><th>الفئة</th><th>معدل المورد $</th><th>عدد الأرقام</th></tr></thead>
+<tbody>
+<tr><td>A2P UK</td><td>PRN</td><td>A2P</td><td>0.0085</td><td>1576</td></tr>
+<tr><td>Algeria Azure</td><td>PRN</td><td>BOTH</td><td>0.0120</td><td>9387</td></tr>
+<tr><td>Algeria Azure Random</td><td>PRN</td><td>BOTH</td><td>0.0180</td><td>4997</td></tr>
+<tr><td>Algeria</td><td>PRN</td><td>BOTH</td><td>0.0150 / 0.0180</td><td>4000 / 1000</td></tr>
+<tr><td>Egypt Azure</td><td>PRN</td><td>BOTH</td><td>0.0100</td><td>1131</td></tr>
+<tr><td>Egypt sms / Egypt</td><td>PRN</td><td>BOTH</td><td>0.0104 / 0.0150</td><td>250 / 264</td></tr>
+<tr><td>Myanmar / Myanmar Azure Random</td><td>PRN</td><td>BOTH</td><td>0.0150 / 0.0180</td><td>5000 / 5000</td></tr>
+<tr><td>Malaysia / Malaysia Azure</td><td>PRN</td><td>BOTH</td><td>0.0150 / 0.0175</td><td>10000 / 7481</td></tr>
+<tr><td>GB (بريطانيا)</td><td>PRN</td><td>P2P</td><td>0.0100</td><td>23</td></tr>
+<tr><td>Germany-D / Italy Vienna</td><td>PRN</td><td>BOTH</td><td>0.0085 / 0.0030</td><td>30 / 100</td></tr>
+</tbody>
+</table>
+</div>
+<div class="state-line"><b>حالة حسابك:</b> «No routes assigned to you yet» — لا مسار واحد مسند إليك، ولهذا أجاب اختبار التسعير التجريبي has_route: false على كل الوجهات.</div>
+
+<h3>5.5 قوائم الأسعار — Price lists <span class="pg-badge">رفع ملفات</span></h3>
+<p>بوابة رفع تسعيرتك أنت إلى المنصة كملف: <code class="i">.csv</code> أو <code class="i">.txt</code> (بفواصل comma أو semicolon أو tab) أو <code class="i">.xlsx</code> بلا وحدات ماكرو، بصفٍ لكل رمز اتصال (Dial Code) أو لكل MCC/MNC مع سعره، بحد أقصى 50,000 صف و10 ميغابايت. وإذا كان الملف بأسلوب MCC/MNC فتُسعَّر كل دولة بأعلى صفوفها (صف "All networks" وكل شبكة). يُحفظ تخطيط الأعمدة (Column Mapping) الذي اخترته للرفعات القادمة، و<strong>يراجع المشغل كل رفعة قبل تطبيقها</strong>. ويعرض الجدول السفلي رفعاتك: رقمها، الملف، الملف، تاريخ السريان، الحالة، عدد الصفوف، ووقت الرفع.</p>
+<div class="state-line"><b>حالة حسابك:</b> «No uploads yet» — لم تُرفع أي قائمة أسعار، وهذه واحدة من طرق الحصول على مسارات وتعرفات تسوية (راجع §09).</div>
+
+<h3>5.6 الأرقام — Numbers <span class="pg-badge">27,506 رقمًا</span></h3>
+<p>المخزون الكامل للأرقام (DIDs) في المنصة مع قاعدة الشفافية الجزئية: «كل صف يعرض معدلك أنت فقط — معدل الإرسال (الوارد) حيث تملك الرقم، ومعدل التسوية (المورد) حيث تمده؛ الجهة الأخرى تبقى مخفية». المرشحات: All / Mine / Claimable، وأعمدة الجدول: الرقم/النطاق، الوجهة، القدرة (Capability مثل TWO_WAY)، النموذج، التعرفة (Tariff مثل T#339)، معدل المورد، آخر ترافيك، الدور/الحالة، وزر <strong>Source</strong> لتمديد الرقم. ويعلن النص الأهم في الصفحة قاعدة السحب التلقائي: «الرقم الذي تمده ولا يستقبل رسالة واردة 7 أيام يُسحب من حسابك؛ أي رسالة واردة تصفّر العداد، ونراسلك قبل 3 أيام».</p>
+<div class="state-line"><b>حالة حسابك:</b> الإجمالي 27,506 رقمًا قابلة للتمديد (276 صفحة)، وفلتر <b>Mine = 0 صفوف</b> — لا تمدّ أي رقم حاليًا. نموذج الصفوف: 213562242833 «Algeria Azure» ثنائي الاتجاه PRN تعرفة T#339 بمعدل 0.0120.</div>
+
+<h3>5.7 سجل الإصدارات — Release history <span class="pg-badge">أرقام غادرت حسابك</span></h3>
+<p>أرشيف كل رقم توقف كونه «لك»: سواء حررته أنت، أو حرره المشغل، أو سُحب تلقائيًا بسبب الخمول، مع الاحتفاظ بالتعرفة التي كنت عليها وقتها. الأعمدة: الرقم/النطاق، الوجهة، القدرة، النموذج، المعدل، آخر ترافيك، السبب (لإشعار بريدي قبل 3 أيام / حررته أنت / من المشغل)، وتاريخ المغادرة. ومرشح السبب يسمح بعرض فئة واحدة دون غيرها، والغاية العملية من الصفحة أن تعرف لماذا فقدت كل رقم كي لا تتكرر الأسباب.</p>
+<div class="state-line"><b>حالة حسابك:</b> صف واحد: الرقم <b>213562242832</b> (Algeria Azure، ثنائي الاتجاه، PRN، معدل 0.0120) — سبب «Released by you» بتاريخ <b>14/10/2026 الساعة 6:01:26 صباحًا</b>، أي صباح يوم إعداد هذا التقرير نفسه.</div>
+
+<h3>5.8 الملفات — Profiles <span class="pg-badge">WHOLESALE / WSALE</span></h3>
+<p>الملفات هي «أنواع الترافيك» التي تحملها وكيف يجب التعامل معها. ملفاتك الحالية تُعرض بجدول: الملف، الرمز (يُرسل كـ service_type في SMPP)، الصلاحية، الأولوية، افتراضي أم لا، ومن أسندته (المشغل). وتحتها نموذج «اقتراح ملف» لأقتراح نوع ترافيك تحمله: اسمه (مثال العنصر النائب: BANKING-OTP)، صلاحيته بالدقائق (افتراضي 1440)، أولويته (Normal / High)، أرضية DLR بالنسبة المئوية (افتراضي 60%)، وخيار بحث HLR/MNP. وينص التقديم: «يقترح المشغل مراجعته وقد يعدله، وعند الموافقة يُسند إليك».</p>
+<div class="state-line"><b>حالة حسابك:</b> ملف واحد: <b>WHOLESALE</b> برمز <b>WSALE</b> — صلاحية يوم واحد، أولوية NORMAL، الملف الافتراضي للحساب، مُسند من المشغل. ولا اقتراحات: «No proposals yet».</div>
+
+<h3>5.9 قائمة الوصول — Access List <span class="pg-badge">التطبيقات × الوجهات</span></h3>
+<p>خريطة الترافيك الفعلي في النظام: «حركة الرسائل (التطبيقات لكل وجهة)، أكثر الوجهات انشغالًا أولًا. المرسل والمستقبل مقنّنان إلى 8 محارف». الأعمدة: المرسل (From — اسم التطبيق المرسل)، المستقبل (To — الرقم مقنّع)، الوجهة، الفئة، معدل المورد، المصدر (كيف وُجد المعدل: <strong>DID</strong> رقم مطابق في جدول الأرقام، أو <strong>billed</strong> التكلفة الفعلية المحصلة عند غياب رقم مطابق، أو «—» لا شيء)، وزر Allocate يفتح صفحة الأرقام على تلك الوجهة لتمديدها. ومرشحات الفترة: آخر 24 ساعة / 7 أيام / 30 يومًا / كل الوقت. القائمة — كما رصدتها الدراسة — تغلب عليها هويات التحقق والتطبيقات الكبرى: TikTok وWhatsApp وPayPal وApple وChatGPT وDISCORD وBybit وBinance وSPOTIFY وTINDER وUber وSHEIN وWestern Union وVFS وخدمات Verify من Twilio وSinch، إضافة إلى مواقع مراهنات، والوجهات الثلاث الأولى انشغالًا هي مصر والجزائر وميانمار. عينة منها:</p>
+<div class="tbl-wrap">
+<div class="tbl-cap">الجدول 3: عينة من قائمة الوصول (250 صفًا على 3 صفحات) — الترافيك الفعلي حسب الوجهة</div>
+<table class="tbl">
+<thead><tr><th>المرسل (From)</th><th>المستقبل (To) مقنّع</th><th>الوجهة</th><th>معدل المورد $</th><th>المصدر</th></tr></thead>
+<tbody>
+<tr><td>AHD / PayPal / ZOHOMV / BRAND / PEGASUS</td><td>20119512xxxx</td><td>Egypt</td><td>0.0100 – 0.0104</td><td>DID</td></tr>
+<tr><td>Microsofx / TikTok / Huawei / SPOTIFY / ChatGPT</td><td>21356xxx…213562xxxx</td><td>Algeria</td><td>0.0150 / 0.0180</td><td>DID</td></tr>
+<tr><td>Apple / ALIPAY / Shopee / TINDER / WesternU / BytePlus</td><td>959xxx…9594xxxxx</td><td>Myanmar</td><td>0.0150</td><td>DID</td></tr>
+<tr><td>PAYPAL / Badoo / Viber / WeChat / X App / inDrive</td><td>21356xxxx</td><td>Algeria</td><td>0.0150 / 0.0180</td><td>DID</td></tr>
+<tr><td>SinchVerxxx / Ari Verixx / TWVerify / AUTHMSG</td><td>وجهات متعددة</td><td>متفرقات</td><td>حسب الوجهة</td><td>DID</td></tr>
+</tbody>
+</table>
+</div>
+<div class="state-line"><b>حالة حسابك:</b> القائمة متاحة للعرض بالكامل (250 صفًا)، وأزرار Allocate فيها هي طريقك الأسرع لتمديد أرقام الوجهات الأعلى ترافيكًا — وهي جاهزة للنقر متى أصلحت اتصالك (راجع §09 و§10).</div>
+
+<h3>5.10 الموصلات الواردة — Inbound Connectors <span class="pg-badge">منك ← المنصة</span></h3>
+<p>أغنى صفحات اللوحة محتوى، وقد فُصّلت بنيتها في القسم §04. وهي تجمع خمس كتل متتالية: <strong>روابط SMPP</strong> (ثوابت المنصة، جدول روابطك بعمودي الحالة والاتصال مع أدوات التعطيل والحذف، ونموذج إضافة ربط جديد)؛ ثم <strong>HTTP API</strong> (المفتاح، نقطة النهاية، صيغة الطلب، صندوق التجربة التفاعلي بأزرار cURL/Node.js/Python وزر «Try it (dry-run)» الذي يسعّر الرسالة دون إرسالها)؛ ثم <strong>قائمة سماح IP</strong> لواجهة API؛ ثم <strong>خطاف الوارد (MO Webhook)</strong> لنسخ المورد؛ وأخيرًا <strong>أسماء المرسل (Sender IDs)</strong>: «مرسلات أبجدية رقمية (كاسم علامة تجارية). بعض الأسواق تتطلب تسجيلًا قبل الاستخدام — اطلب هنا ويوافق مشغل». تُسجَّل بطلب يحمل الاسم والوجهة الاختيارية.</p>
+<div class="state-line"><b>حالة حسابك:</b> ربط واحد (system_id «450»، نشط، الاتصال «Connecting») · لا أسماء مرسل مسجلة: «No sender IDs yet» · الخطاف معطّل (لا عنوان مضبوط) · مفتاح API نشط قابل للتدوير · قائمة سماح IP فارغة (السماح لأي مصدر).</div>
+
+<h3>5.11 الفوترة — Billing <span class="pg-badge">دورات وسحب</span></h3>
+<p>تنظيم دورة أموالك، بأربع كتل. <strong>الإعدادات</strong>: اختيار دورة الفوترة بين أسبوعية (Weekly Factoring بفترة 7/7 أيام — بخصم 30%) وشهرية افتراضية (30/30 — بلا خصم)، مع ضمان «الفاتورة القادمة تبدأ حيث انتهت سابقتها، فلا يوم يُفوتر مرتين ولا يسقط»؛ ثم بيانات السحب المالي (حساب/IBAN/SWIFT، محفظة…). <strong>تنبيهات الاستخدام</strong>: عتبة تختارها (عدد رسائل، أو قطع Segments، أو مبلغ مفوتر بالدولار) ودورية (يومي/شهري/سنوي/مرة واحدة)، تصل إلى لوحتك وبريدك، مع قاعدة: «المفوتر لا يحسب إلا ما فُوتر فعلاً — الرسالة المنتظرة تسليمها ليست بعد مفترة». <strong>المدفوعات (Payouts)</strong>: «الحد الأدنى للدفع 200.00 دولار». <strong>الفواتير</strong>: تُولَّد لكل دورة مقفلة بأعمدة الرقم/الفترة/النوع/الرسائل/الإجمالي/الاتجاه/المسوى/المتبقي، والنقر على فاتورة يفتح بنودها. وأخيرًا <strong>قيود الحساب</strong>: «الأموال التي حركناها يدويًا — تسويات وتصحيحات وتسويات؛ رسائلك ليست هنا بل في فواتيرك».</p>
+<div class="state-line"><b>حالة حسابك:</b> الرصيد 0.0000 و«Below the minimum, so no payout is due yet» · لا فواتير: «No invoices yet» · لا قيود يدوية: «Nothing has been recorded by hand on this account» · الفاتورة القادمة: <b>10/1/2026 – 11/1/2026</b> · بيانات السحب غير معبأة.</div>
+
+<h3>5.12 الدعم — Support <span class="pg-badge">مساعد + تذاكر</span></h3>
+<p>تبويبان: <strong>المساعد</strong> — مساعد ذكي مطلع على بياناتك يجيب عن الأرقام والموصلات والرسائل والتعرفات والفوترة، ويستطيع فتح تذكرة بشرية عند الحاجة؛ وقد استُخدم فعليًا خلال هذه الدراسة مرتين وخرج بتوصيف دقيق للمنصة ثم بتشخيص عائقَي حسابك (راجع §02 و§07). و<strong>تذاكري</strong>: جدول تذاكر الدعم (الرقم، الموضوع، الحالة، تاريخ الفتح) مع زر تذكرة جديدة.</p>
+<div class="state-line"><b>حالة حسابك:</b> «No tickets yet» — لم تُفتح أي تذكرة دعم من قبل؛ والمساعد متاح فورًا دون تذكرة.</div>
+
+<div class="note"><b>خلاصة الجولة:</b> الصفحات الاثنتا عشرة ليست أقسامًا منفصلة بل مسارًا واحدًا: تمتد الأرقام (Numbers) لتولّد ترافيكًا يصلك عبر موصل صادر (Outbound Connectors) ويُسجل رسائلًا (Outbound Messages) بتسوية من أسعار التسوية (Settlement Rates) تُقفل في فواتير (Billing) وتُسحب مدفوعاتها، بينما قائمة الوصول (Access List) ترشدك إلى حيث الترافيك، والموصلات الواردة (Inbound Connectors) تمنحك قناة الاتصال المعاكسة وHTTP API، والدعم والمساعد يغطيان ما عدا ذلك. حسابك «مسلّح هيكليًا» في كل صفحة لكنه بلا ذخيرة تشغيلية في أيٍّ منها — وهذا موضوع القسم التالي في محور الإرسال ثم تحليل الحالة.</div>
+
+<!-- ===== §06 محور الإرسال ===== -->
+<div class="chapter-header" id="sec06">
+  <div class="sec-chip">§06</div>
+  <h2>محور الإرسال بالتفصيل: كيف ينساب الترافيك؟</h2>
+  <div class="sec-divider"></div>
+</div>
+<p>بناءً على اختيارك لهذا المحور تركيزًا خاصًا، يفصّل هذا القسم القناة الثلاثية الكاملة: <strong>كيف يصلك الترافيك</strong>، <strong>كيف تعيد إيصالاته</strong>، و<strong>كيف ترسل أنت بنفسك إلى المنصة</strong>. وقد اعتمدت الدراسة فيها على النصوص الرسمية للصفحات، وعلى اختبارين فعليين لصندوق التجربة (dry-run)، وعلى إجابتي مساعد الدعم المدمج اللتين وثّقتا المسار من جهة المنصة نفسها.</p>
+<h3>6.1 استقبال ترافيك المورد عبر SMPP — وعقد DLR الملزم</h3>
+<p>لأن دورك جانب المورد، فقناة «الإرسال» الأساسية بالنسبة لك هي قناة <strong>الاستقبال</strong>: المنصة تربط خارجيًا إلى SMSC لديك (الموصل الصادر في صفحتها) وتسلّمك الرسائل على ذلك الربط. وقد لخص مساعد الدعم مسار حياتك التشغيلية في أربع خطوات رسمية: «1) مدّد أرقامًا من صفحة Numbers؛ 2) جهّز موصلًا خارجيًا — SMSC ببروتوكول SMPP أو نقطة HTTP عندك — فهو الطريق الذي نوصل به الترافيك إليك؛ 3) احمل الترافيك — تصل الرسائل عبر موصلك وتظهر سجلاتها وإحصاءاتك في اللوحة؛ 4) تقاضَ أجرك — تعرفات التسوية في صفحة Rates، والفواتير تلخص ترافيكك المُسعَّر لكل فترة، والمدفوعات في Billing». أي أن الموصل ليس خيارًا تقنيًا جانبيًا؛ هو ركن المسار كله.</p>
+<p>ثم يأتي <strong>عقد إيصالات التسليم (DLR)</strong> وهو أشهر ما يميز هذا السوق عن أي لوحة إرسال عادية. النص الرسمي الكامل للإشعار كما فتحته الدراسة من نافذته (بتاريخ 13/10 الساعة 5:53:53 صباحًا): «في حالة موصل smpp المستخدم لتمرير الترافيك إلى خادمك، تأكد من إرسال إيصالات التسليم على كل رسائل الترافيك، وإلا ستنتهي صلاحية الرسائل بتسعيرة 0.0000 خلال 24 ساعة». المعنى التشغيلي: خادمك حين يستلم رسالة عبر الربط يجب أن يعالجها ويعيد للمنصة إشعار تسليم (deliver_sm) عنها؛ الرسالة التي تظل بلا إيصال يوماً كاملًا تُقفل بتكلفة صفرية — أي أن قيمتها تسقط من مستحقاتك حتى لو وصلت فعلاً إلى وجهتها. ومن هنا فإن أي خادم تستقبله يجب أن يُبنى فيه من الأول سلوك إرجاع DLR تلقائيًا لكل رسالة بلا استثناء، لا أن يُضاف لاحقًا.</p>
+<h3>6.2 قناة HTTP API — الإرسال البرمجي إلى المنصة</h3>
+<p>القناة الثانية متاحة لأي اتجاه: واجهة REST بمفتاحك. الطلب نموذجي وصغير الحجم، والاستجابة تسعيرية تفصيلية — وقد أجرت الدراسة اختبارين حقيقيين بأمر dry-run (يسعّر ولا يرسل): الأول إلى رقم بريطاني 447700900123 والثاني إلى رقم جزائري 213562242833، وكانت الاستجابة متطابقة بنيويًا في الحالتين كما في الجدول أدناه. صيغة الطلب كما تظهرها الصفحة:</p>
+<div class="code"><span class="c"># POST https://sms.carefulsupport.com/v1/send</span>
+<span class="k">curl</span> -X POST <span class="s">"https://sms.carefulsupport.com/v1/send"</span> \
+  -H <span class="s">"x-api-key: vendor_cd322d8d…"</span> \
+  -H <span class="s">"content-type: application/json"</span> \
+  -d <span class="s">'{"to":"213562242833","from":"TestBrand","text":"Hello from the sandbox"}'</span>
+
+<span class="c"># ضبط خطاف الوارد: PUT /v1/account/mo-webhook  {"mo_url": "…"}</span></div>
+<div class="tbl-wrap splittable">
+<div class="tbl-cap">الجدول 4: حقول استجابة التسعير (dry-run) كما أجابت بها المنصة فعليًا في اختبارَي الدراسة</div>
+<table class="tbl">
+<thead><tr><th>الحقل</th><th>القيمة في اختباريك</th><th>الدلالة</th></tr></thead>
+<tbody>
+<tr><td><code class="i">to</code></td><td>447700900123 / 213562242833</td><td>الرقم المستهدف</td></tr>
+<tr><td><code class="i">encoding</code></td><td>GSM</td><td>ترميز الحروف (GSM 7-bit)</td></tr>
+<tr><td><code class="i">segments</code> · <code class="i">per_segment_limit</code></td><td>1 · 160</td><td>عدد القطع وحد الحروف للقطعة الواحدة</td></tr>
+<tr><td><code class="i">unit_rate</code> · <code class="i">total_cost</code></td><td>0.0000 · 0.0000</td><td>سعر القطعة والإجمالي — صفر لغياب المسار</td></tr>
+<tr><td><code class="i">currency</code></td><td>USD</td><td>عملة التسعير</td></tr>
+<tr><td><code class="i">billing_model</code> · <code class="i">band</code></td><td>null · null</td><td>النموذج والنطاق — غير محددين لغياب تسعيرة</td></tr>
+<tr><td><code class="i">rating_source</code></td><td>none</td><td>لم يُوجد مصدر تسعير (لا رقم DID مطابق ولا تسعيرة)</td></tr>
+<tr><td><code class="i">has_route</code></td><td>false</td><td><b>لا يوجد مسار لهذا الحساب إلى الوجهة</b> — المؤشر الحاسم</td></tr>
+<tr><td><code class="i">class_blocked</code></td><td>false</td><td>فئة الترافيك غير محجوبة</td></tr>
+<tr><td><code class="i">profile_id</code></td><td>1</td><td>الملف المرتبط بالطلب (WHOLESALE)</td></tr>
+</tbody>
+</table>
+</div>
+<p>الدلالة العملية لهذه الاستجابة أن محرك التسعير يعمل ويجيب ببنية كاملة، لكنه لا يجد لحسابك أي مسار إلى أي من الوجهتين المختبرتين — وهو ما يتطابق مع «No routes assigned to you yet» في صفحة أسعار التسوية. فصندوق التجربة ليس زخرفة؛ هو أسرع وسيلة لاختبار أي وجهة قبل الالتزام بها: أدخل الرقم، شغّل dry-run، واقرأ <code class="i">has_route</code> و<code class="i">unit_rate</code>. وبجانب قناة API نفسها تأتي <strong>قائمة سماح IP</strong> (عنوان أو نطاق CIDR في كل سطر، والفراغ سماح للجميع، ولا تأثير لها على جلسة المتصفح) — وهي طبقة أمان يُنصح بتفعيلها متى استقرت عناوين خوادمك.</p>
+<h3>6.3 خطاف الوارد (MO Webhook) — نسخ المورد</h3>
+<p>هذه قناة استقبال ثالثة كاملة تعمل بالتوازي مع SMPP: عنوان تضبطه في صفحة الموصلات الواردة، تدفع إليه المنصة <strong>نسخة المورد</strong> من كل رسالة واردة على الأرقام التي تمدها — «نفس الرسالة التي يستقبلها العميل المالك، تُسلَّم باستقلال». تحمل النسخة العلم <code class="i">role: "vendor_copy"</code> ويُعلَّم الترافيك التجريبي بـ <code class="i">simulated: true</code>. وضبط عنوان يبدأ الدفع فورًا، ومسحه يوقفها؛ كما تُسلَّم النسخ نفسها كرسائل على ربط SMPP الوارد متى كان متصلًا. الميزة العملية: تعمل حتى لو كان موصلك الخارجي خارج الخدمة، وتغذي أنظمتك الخلفية (قواعد بيانات، لوحات، تكاملات) دون المرور بخادم SMPP.</p>
+<h3>6.4 أسماء المرسل — Sender IDs</h3>
+<p>آخر حلقة في سلسلة الإرسال: <strong>المرسلات الأبجدية الرقمية</strong> (اسم علامة تظهر مكان رقم المرسل على جهاز المستلم). تسجَّل بطلب من صفحة الموصلات الواردة (الاسم + الوجهة اختياريًا) ويوافق عليه مشغل، لأن بعض الأسواق تشترط التسجيل قبل الاستخدام. وهي مفيدة في مسارات WHOLESALE التسويقية خصوصًا حيث هوية المرسل تؤثر في نسب الاطلاع والاستجابة؛ أما في ترافيك التحقق PRN فتكون غالبًا من جهة التطبيقات نفسها (TikTok، PayPal…) كما رصدت قائمة الوصول.</p>
+<div class="state-line"><b>حالة حسابك في محور الإرسال كله:</b> لا موصل خارجي قائم (فشل #34 قديم ومحذوف من القائمة) · ربطك الوارد «450» نشط لكنه غير متصل (Connecting) · خطاف الوارد معطل · لا أسماء مرسل مسجلة · dry-run يؤكد: لا مسارات. الخلاصة: <b>لا قناة إرسال ولا استقبال واحدة تعمل الآن</b> — والحل المفصل في §09.</div>
+
+<!-- ===== §07 حالة الحساب ===== -->
+<div class="chapter-header" id="sec07">
+  <div class="sec-chip">§07</div>
+  <h2>حالة الحساب الحالية: النتائج والمشاهدات</h2>
+  <div class="sec-divider"></div>
+</div>
+<p>يجمع هذا القسم كل ما رصدته الدراسة عن وضع حسابك لحظة إعداده (14 أكتوبر 2026)، ويحلل دلالاته. القاعدة الأولى: <strong>الخلل الشامل ليس في الهيكل بل في التشغيل</strong>. فالحساب ACTIVE والملف الافتراضي WHOLESALE مسند من المشغل، والسماحيات كلها مفتوحة (تمديد الأرقام، رفع قوائم الأسعار، اقتراح ملفات، فتح تذاكر) — لكن لا يوجد تحته أي شيء يعمل: لا موصل قائم، ولا رقم ممتد، ولا مسار مسند، ولا خطاف، ولا بيانات سحب.</p>
+<h3>7.1 المشهد الكامل بالأرقام</h3>
+<div class="stat-grid">
+  <div class="stat"><b>0</b><span>موصلات خارجية قائمة («No connectors yet»)</span></div>
+  <div class="stat"><b>0</b><span>أرقام ممدّدة (فلتر Mine = 0 من 27,506)</span></div>
+  <div class="stat"><b>0</b><span>مسارات تسوية مسندة («No routes assigned»)</span></div>
+  <div class="stat"><b>Connecting</b><span>حالة ربطك الوارد «450» — لا جلسة حية</span></div>
+</div>
+<p>وأضف إلى ذلك: رصيد 0.0000 دولار بلا أي فاتورة أو قيد يدوي، ولا قائمة أسعار مرفوعة، ولا اقتراح ملف، ولا تذكرة دعم، ولا اسم مرسل، وخطاف وارد معطل، وقائمة سماح IP فارغة. وآخر نشاط معاين على الحساب قبل فترة الدراسة هو تحريرك الرقم الوحيد الذي كنت تمدّه (213562242832 — Algeria Azure) صباح يوم الدراسة نفسه الساعة 6:01:26، وهو الآن الصف الوحيد في سجل الإصدارات. أما إشعار «Quiet account» فوثّق أن الحساب لم يحمل أي ترافيك منذ فتحه: 79 يومًا حتى 5 سبتمبر، أي أن عمر الحساب يقارب ثلاثة أشهر ونصفاً حين أُعد التقرير.</p>
+<h3>7.2 تحليل فشل الموصل #34 — تشخيص ETIMEOUT</h3>
+<p>الإشعارات اليومية تقول: «موصل SMPP الخاص بك رقم #34 (vemail.pp.ua:2775، system_id 450) ما زال فاشلًا (منذ 2026-09-30 18:24 UTC، نحو N ساعة)». آخر خطأ: <strong>ETIMEOUT: Timeout of 30000ms</strong> — انتهت مهلة 30 ثانية دون استجابة. وقد أعطى مساعد الدعم التشخيص المعياري لهذا النمط تحديدًا: المحاولات تصل إلى خادمك <strong>فلا تجد أي استجابة أصلاً</strong> — الاتصال لا يُرفض (Refused) بل يُتجاهل، وهذا يكاد يحصر السبب في أربعة، مرتبة بالشيوع:</p>
+<ol>
+<li><strong>خادم SMSC لا يستمع على المنفذ 2775</strong> — الخدمة متوقفة، أو مربوطة بواجهة شبكة أو منفذ آخر غير الذي سجلته في الموصل.</li>
+<li><strong>جدار حماية / مجموعة أمان سحابية</strong> تُسقط الحزم الواردة إلى ذلك المنفذ بصمت — والسماح الواجب هو تحديداً من IP المنصة 35.224.28.251.</li>
+<li><strong>انزياح DNS</strong> — النطاق vemail.pp.ua لم يعد يشير إلى الخادم الذي يعمل عليه SMSC فعلاً.</li>
+<li>بدرجة أقل: <strong>بيانات اعتماد الربط</strong> (system_id 450 وكلمة المرور) لا يقبلها الخادم، أو الخادم يرفض نمط الربط TRX.</li>
+</ol>
+<div class="note"><b>لغز الإشعارات المستمرة:</b> صفحة الموصلات تقول «No connectors yet» بينما تراقب صحة النظام موصلًا اسمه #34 — والمساعد نفسه رأى الربط باسم <b>#35</b>. التفسير الأرجح: الموصل القديم حُذف من واجهتك لكن مراقبة الصحة ما زالت تفحصه وتصيح يوميًا. عمليًا لا فرق: ما دام خادم vemail.pp.ua:2775 غير قابل للوصول من الإنترنت، فستظل الرسائل تفشل أياً كان اسم الموصل في السجلات، والحل واحد في كل الحالات — إصلاح الخادم ثم إنشاء موصل نظيف من النموذج (خطوات مفصلة في §09).</div>
+<h3>7.3 قراءة سجل الإشعارات كاملاً</h3>
+<p>فيما يلي الجدول التحليلي للإشعارات الواحد والعشرين كما وثّقتها الدراسة (التواريخ بصيغة اللوحة، والأسماء كما وردت نصًا). لاحظ أن أربعة عشر إشعارًا منها هي تكرار يومي لإشعار واحد فعلياً — فشل الموصل — وهو أعلى بند في بريدك، وينبغي أن يهبط إلى الصفر فور إصلاح الاتصال:</p>
+<div class="tbl-wrap">
+<div class="tbl-cap">الجدول 5: سجل الإشعارات (21 صفًا) — تصنيف ودلالة وإجراء مطلوب</div>
+<table class="tbl">
+<thead><tr><th>التاريخ</th><th>الإشعار</th><th>الدلالة</th><th>الإجراء المطلوب منك</th></tr></thead>
+<tbody>
+<tr><td>10/1 → 10/13 (14 صفًا يوميًا)</td><td>Connector health — Still failing</td><td>فشل الموصل #34 مستمر منذ 9/30 18:24 UTC (آخر حصر: ~312 ساعة)</td><td>إصلاح خادم SMPP والجدار وDNS (§09.1) ثم إعادة إنشاء الموصل</td></tr>
+<tr><td>10/13 5:53 ص</td><td>EXPIRED SMS</td><td>تحذير منهجي: بلا DLR تُقفل الرسائل بتسعيرة 0.0000 خلال 24 ساعة</td><td>بناء إرجاع DLR تلقائي في خادم الاستقبال</td></tr>
+<tr><td>9/25</td><td>أرقام SMS جديدة — قائمة الوصول جاهزة</td><td>أرقام مميزة ووجهات جديدة أضيفت للنظام</td><td>مراجعة صفحة الأرقام وقائمة الوصول وتمديد ما يناسبك</td></tr>
+<tr><td>9/24 · 9/15 · 9/3</td><td>تعرفات جديدة (New tariffs)</td><td>أسعار تسوية جديدة: فلسطين 0.0072، UK Mobile 0.0072، Germany-D 0.0085، Slovenia 0.0166، Peru 0.0286، Italy Fastweb 0.0075…</td><td>متابعة صفحة أسعار التسوية لما قد يُسند إليك</td></tr>
+<tr><td>9/8</td><td>قائمة الوصول المميزة اليومية</td><td>جرد التطبيقات × الوجهات (Apple/FACEBOOK/VERIFY أفغانستان، 1win إندونيسيا، Uber كينيا، AXISBK/OFBANK/SHEIN الكويت…)</td><td>استثمارها في اختيار وجهات التمديد</td></tr>
+<tr><td>9/5</td><td>Quiet account — 79 يومًا بلا ترافيك</td><td>الحساب هادئ منذ الفتح؛ وتطمين: أرقامك ومساراتك وموصلاتك تبقى كما هي</td><td>تشغيل المسار كاملاً (تمديد + موصل) لكسر الجمود</td></tr>
+</tbody>
+</table>
+</div>
+<p>الدلالة الإجمالية للسجل: المنصة <strong>ما زالت تعتبرك شريكًا قائمًا</strong> — تواصل معك، ترفع لك جرد التطبيقات والوجهات، وتضيف تعرفات جديدة، وتصارحك بأن حسابك هادئ. لا يوجد في السجل ما يشير إلى تجميد أو إنذار أو نية إغلاق؛ كله قابل للانعكاس فور اكتمال خطتي التفعيل والمهام في القسمين التاليين.</p>
+
+<!-- ===== §08 قاموس المصطلحات ===== -->
+<div class="chapter-header" id="sec08">
+  <div class="sec-chip">§08</div>
+  <h2>قاموس المصطلحات</h2>
+  <div class="sec-divider"></div>
+</div>
+<p>يجمع هذا القاموس كل مصطلح ورد في اللوحة أو في هذه الدراسة، بتعريف عربي مبسط يربطه بواقع حسابك. رتبت المداخل أبجديًا بحسب الاختصار اللاتيني لأنه الشائع في الصناعة، وستجد في كل مدخل ما يكفي لقراءة أي صفحة من اللوحة دون رجوع خارجي.</p>
+<div class="tbl-wrap splittable">
+<div class="tbl-cap">الجدول 6: قاموس مصطلحات المنصة</div>
+<table class="tbl">
+<thead><tr><th>المصطلح</th><th>التعريف</th></tr></thead>
+<tbody>
+<tr><td><b>A2P / P2P / BOTH</b></td><td>فئة الترافيك: من تطبيق إلى شخص / من شخص إلى شخص / كلاهما معًا. تظهر في عمود Class بسجلات الرسائل وقائمة الوصول.</td></tr>
+<tr><td><b>AP (Accounts Payable)</b></td><td>جانب الدائنين في فوترة المنصة: ما تستحقه أنت عليها عن الرسائل التي حملتها — يُسوى في دورات الفوترة.</td></tr>
+<tr><td><b>CDR</b></td><td>سجل تفاصيل المكالمة/الرسالة: الصف الواحد في سجلات الرسائل (وقت، مرسل، مستقبل، قطع، تكلفة، حالة).</td></tr>
+<tr><td><b>Claim (استئثار)</b></td><td>فعل العميل: حجز رقم متاح ليملكه، فيُحاسب بتعرفة الإرسال على ترافيكه. مقابل Source الذي هو فعل المورد.</td></tr>
+<tr><td><b>CR (Confirmation of Reception)</b></td><td>ضابط تسوية على بعض النطاقات المميزة (A2P-CR / P2P-CR / BOTH-CR): لا يُدفع للمورد إلا بعد تأكيد التسليم برمز يعاد ضمن نافذة زمنية. يظهر في عمود CR بالرسائل.</td></tr>
+<tr><td><b>DID</b></td><td>رقم مباشر وهمي (Virtual Number) يستقبل رسائل نصية؛ المخزون الأساسي للمنصة (27,506 رقمًا حاليًا) ووحدة التمديد في صفحة Numbers.</td></tr>
+<tr><td><b>DLR (Delivery Receipt)</b></td><td>إيصال تسليم يعيده حامل الترافيك عن كل رسالة. في هذا النظام: إلزامي، وإلا انتهت الرسالة بتسعيرة 0.0000 خلال 24 ساعة.</td></tr>
+<tr><td><b>Dial Code / MCC-MNC</b></td><td>رمز الاتصال الدولي، أو ترميز الدولة/الشبكة — أساسان يعتمد عليهما ملف قوائم الأسعار (صف لكل منهما مع سعره).</td></tr>
+<tr><td><b>Factoring (أسبوعي/شهري)</b></td><td>دورة الفوترة: أسبوعية 7/7 أيام بخصم 30%، أو شهرية 30/30 بلا خصم؛ الفاتورة التالية تبدأ حيث انتهت سابقتها.</td></tr>
+<tr><td><b>HLR / MNP</b></td><td>سجل موقع المشتركين / خدمة نقل الأرقام بين المشغلين — بحث تفعيله متاح في اقتراح الملفات (Profiles).</td></tr>
+<tr><td><b>MO / MT</b></td><td>رسالة واردة من الشبكة إلى رقمك (Mobile-Originated) / رسالة صادرة إليها (Mobile-Terminated). مرشحها ALL/MT/MO في سجل الرسائل.</td></tr>
+<tr><td><b>PRN (Premium Rate Number)</b></td><td>نموذج التعرفة المميزة: تسعير أعلى وتقاسم ريع، وأعلى دفع للمورد، وقد يخضع لضابط CR.</td></tr>
+<tr><td><b>Profile (ملف)</b></td><td>نوع ترافيك تُعرف بطريقة التعامل معه؛ يُرسل رمزه كـ service_type في SMPP. ملفك: WHOLESALE برمز WSALE، صلاحية يوم، أولوية NORMAL.</td></tr>
+<tr><td><b>Segments (قطع)</b></td><td>أجزاء الرسالة الطويلة: كل 160 حرفًا GSM قطعة تُسعّر مستقلة (per_segment_limit: 160 كما في استجابة dry-run).</td></tr>
+<tr><td><b>Sender ID</b></td><td>مرسل أبجدي رقمي (اسم علامة) يظهر مكان رقم المرسل؛ بعض الأسواق تشترط تسجيله وموافقة المشغل قبل استخدامه.</td></tr>
+<tr><td><b>Settlement Rate</b></td><td>تعرفة التسوية: ما تدفعه المنصة للمورد عن كل رسالة يحملها — على مسارات PRN وWHOLESALE معًا. بطاقة أتعاب المورد.</td></tr>
+<tr><td><b>SMPP 3.4</b></td><td>بروتوكول تبادل الرسائل بين الأنظمة، إصدار 3.4 — عمود فقري للترافيك؛ أنماط الربط TRX (إرسال+استقبال)، TX (إرسال)، RX (استقبال).</td></tr>
+<tr><td><b>Source (تمديد)</b></td><td>فعل المورد: مدّ رقم من مخزون المنصة لتزويد ترافيكه والتحق به. يُسحب تلقائيًا بعد 7 أيام بلا رسالة واردة (ويُنذر قبل 3 أيام).</td></tr>
+<tr><td><b>system_id</b></td><td>اسم مستخدم الربط في SMPP. ربطك الوارد: «450»؛ وكان كذلك system_id الموصل الفاشل #34.</td></tr>
+<tr><td><b>Tariff (T#)</b></td><td>تعرفة مرقمة تربط الوجهة بنموذجها وفئتها ومعدلها؛ تظهر في عمود Tariff بصفحة الأرقام (مثل T#339 لـ Algeria Azure).</td></tr>
+<tr><td><b>Vendor Copy</b></td><td>نسخة المورد من الرسالة الواردة على رقم تمده — تُدفع إلى خطاف الوارد (role: vendor_copy) أو على ربطك الوارد كرسالة.</td></tr>
+<tr><td><b>Webhook (MO Webhook)</b></td><td>عنوان تضبطه لتدفع إليك المنصة رسائل الوارد برمجيًا فورًا؛ بدءه بضبط URL ووقفه بمسحه.</td></tr>
+<tr><td><b>WHOLESALE</b></td><td>نموذج الرسائل الجملية الاعتيادية (تسويق / OTP) بأسعار جملة — وهو نموذج ملفك الحالي الوحيد.</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ===== §09 المطلوب 1 ===== -->
+<div class="chapter-header" id="sec09">
+  <div class="sec-chip">§09</div>
+  <h2>المطلوب (1): متطلبات التفعيل والتشغيل</h2>
+  <div class="sec-divider"></div>
+</div>
+<p>هذا القسم يجيب نصًا عن سؤالك «ما المطلوب فيها» بمعناه الأول: <strong>ما يلزم لتفعيل اللوحة وتشغيلها من صفر إلى أول رسالة مسجلة</strong>. وقد رسمت خارطته من ثلاثة مصادر متطابقة: بنية الصفحات نفسها، واختبارات dry-run، وتشخيص مساعد الدعم الرسمي الذي حصر عائقك في اثنين: «لا أرقام ممدّدة — وهذا سبب فراغ الحساب رغم كل شيء» و«الربط الخارجي غير قائم». المتطلبات مرتبة أدناه بترتيب التنفيذ المنطقي، لا بترتيب القوائم.</p>
+<h3>9.1 إعادة تأهيل خادم SMPP لديك (شرطٌ لا بديل عنه)</h3>
+<p>خادمك <code class="i">vemail.pp.ua</code> هو الطرف المفقود في المعادلة منذ 30 سبتمبر. القائمة الرسمية لأسباب ETIMEOUT تنطبق هنا بالترتيب، وكل بند فيها فحص مستقل قم به بتسلسل: <strong>(أ)</strong> تأكد أن خدمة SMSC تعمل فعلًا وتستمع على المنفذ 2775 على واجهة عامة (0.0.0.0 لا 127.0.0.1) — فحصها من الخادم نفسه ومن الإنترنت الخارجي. <strong>(ب)</strong> افتح المنفذ 2775 inbound في جدار الحماية ومجموعة الأمان السحابية، وقصر السماح على IP المنصة <code class="i">35.224.28.251</code> تحديدًا — هو المصدر الوحيد الذي سيرتبط بك، ولا معنى لفتح المنفذ للعالم كله. <strong>(ج)</strong> تحقق أن DNS لـ vemail.pp.ua يحل إلى العنوان الحقيقي للخادم الذي تعمل عليه الخدمة اليوم (اختبر من شبكة خارجية)، وصحّح السجل أو استبدل المستضيف بعنوان IP مباشر في الموصل إن لزم. <strong>(د)</strong> راجع بيانات الربط التي سيقدمها المنصة: system_id «450» مع كلمة المرور التي تعرفها، وتأكد أن خادمك يقبل نمط TRX لا TX فقط.</p>
+<h3>9.2 إنشاء الموصل نظيفًا من نموذج الصفحة</h3>
+<p>بعد صحة الخادم، لا تُبقِ الموصل القديم في الذاكرة: أنشئ موصلًا واحدًا جديدًا من نموذج صفحة Outbound Connectors بالقيم التي تعمل فعلاً عندك — المحوّل generic-smpp34، المستضيف (vemail.pp.ua أو IP مباشر بعد تصحيح DNS)، المنفذ 2775، system_id وكلمة مرور، نمط MO الذي يناسب بنيتك (SAME_BIND إن كان خادمك يحمل الإرسال والاستقبال على ربط واحد)، والملف: «أي ملف» لتشمل الحركة كلها، أو WHOLESALE إن أردت حصر هذا الموصل بترافيك الملف وحده. ثم راقب حالة الاتصال في الصفحة حتى تتحول من الفشل إلى قائمة، وتوقف إشعارات «Connector health» اليومية — هذا مؤشر النجاح الأول.</p>
+<h3>9.3 الحصول على مسارات وتعرفات تسوية</h3>
+<p>المسار هو ما يجعل أي وجهة قابلة للتسعير على حسابك، واليوم لديك صفر مسار (has_route: false). طرق الحصول ثلاثة: <strong>الانتظار الإجرائي</strong> — إسناد المشغل مسارات في صفحة أسعار التسوية، وتابع لذلك إشعارات «تعرفات جديدة» التي تصلك أساسًا؛ و<strong>رفع قائمة أسعار</strong> من صفحة Price lists (CSV/TXT/XLSX بفواصل متعددة، حتى 50,000 صف و10MB، صف لكل Dial Code أو MCC/MNC، ويراجعها المشغل قبل التطبيق — وتذكّر أن ملف MCC/MNC يُسعّر كل دولة بأعلى صفوفها)؛ و<strong>التمديد التلقائي عبر الأرقام</strong> كما في البند التالي، فكل رقم تمده يحمل تعرفة تسويته معه.</p>
+<h3>9.4 تمديد الأرقام — وقاعدة السحب السباعية</h3>
+<p>افتح صفحة Numbers أو استخدم أزرار Allocate من قائمة الوصول (وهي أذكى نقطة انطلاق لأنها ترشدك إلى الوجهات الأنشط: مصر والجزائر وميانمار). اختر أرقام الوجهات ذات الترافيك المرئي، وانقر Source. من هذه اللحظة يعمل مؤقتان عليك: <strong>مؤشر السحب</strong> — الرقم الذي لا يستقبل رسالة واردة 7 أيام يُسحب منك تلقائيًا (وتصلك رسالة قبل 3 أيام، وأي رسالة واردة تصفّر العداد؛ عمود «آخر ترافيك» يبقيك مطلعًا)؛ <strong>واجب DLR</strong> — كل ما يصلك عبر الموصل يجب أن يعاد له إيصال تسليم خلال 24 ساعة وإلا أُقفل بتسعيرة 0.0000. لذلك اختر في البداية أعدادًا صغيرة تستطيع خدمتها بجودة، ثم اتسع تدريجيًا.</p>
+<h3>9.5 تجهيز الفوترة والسحب</h3>
+<p>عند أول ترافيك محمول ستبدأ مستحقاتك بالتراكم، ولن تصل إليك قبل إتمام ثلاثة: <strong>بيانات السحب</strong> في صفحة Billing (حساب بنكي/IBAN/SWIFT أو محفظة) — وهي اليوم غير معبأة؛ و<strong>بلوغ حد الدفع 200 دولار</strong> (رصيدك الآن 0.0000)؛ و<strong>اختيار دورة الفوترة</strong>: أسبوعية 7/7 بخصم 30% أو شهرية 30/30 بلا خصم، ويمكنك التبديل وقت تشاء بلا يوم مزدوج أو ساقط. وأضف <strong>تنبيهات الاستخدام</strong> (عتبة رسائل/قطع/مبلغ مفوتر، بدورية يومية أو شهرية أو سنوية أو مرة واحدة) لتصلك على اللوحة والبريد — فالبند «المفوتر» لا يحسب إلا ما فُوتر فعلاً.</p>
+<h3>9.6 قنوات إرسال المنصة إليك — إعداد كامل لا قناة واحدة</h3>
+<p>لأن انقطاعك الحالي أثمن درس هنا: جهّز أكثر من قناة استقبال في آن واحد. <strong>خطاف الوارد (MO Webhook)</strong>: اضبط mo_url ليُدفع إليك نسخة المورد فورًا — يعمل حتى لو تعطل ربط SMPP، ويشغّل بمجرد ضبط URL ويوقف بمسحه. <strong>الربط الوارد «450»</strong>: موجود ومعرّف، ويلزم فقط أن يكمل اتصاله من طرف خادمك إلى 35.224.28.251:2775. <strong>قائمة سماح IP</strong> لمفتاح API: قيّد الطلبات إلى عناوين خوادمك (واحد أو نطاق CIDR بالسطر) بدل تركها مفتوحة للجميع كما هي الآن. وهكذا يكتمل مثلث الاستقبال: موصل خارجي للترافيك الثقيل، وخطاف للتكاملات الخلفية، وربط وارد لقناة SMPP المعاكسة.</p>
+
+<!-- ===== §10 المطلوب 2 ===== -->
+<div class="chapter-header" id="sec10">
+  <div class="sec-chip">§10</div>
+  <h2>المطلوب (2): خطة المهام العملية والتوصيات</h2>
+  <div class="sec-divider"></div>
+</div>
+<p>هذا القسم يجيب عن «ما المطلوب فيها» بمعناها الثاني: <strong>ما المطلوب منك الآن، داخل الحساب، بترتيب قابل للتنفيذ</strong>. الجدول التالي هو قائمة المهام الكاملة مرتبة بأربع أولويات (P1 فورًا، P2 هذا الأسبوع، P3 قبل أول ترافيك، P4 تحسينات لاحقة)، مع مكان التنفيذ في اللوحة وحالة كل بند اليوم:</p>
+<div class="tbl-wrap splittable">
+<div class="tbl-cap">الجدول 7: خطة المهام الكاملة مرتبة بالأولوية</div>
+<table class="tbl">
+<thead><tr><th>الأولوية</th><th>المهمة</th><th>أين</th><th>الحالة اليوم</th></tr></thead>
+<tbody>
+<tr><td><b>P1</b></td><td>تشغيل خدمة SMCC على المنفذ 2775 بواجهة عامة</td><td>خادمك vemail.pp.ua (خارج اللوحة)</td><td>متوقفة — سبب ETIMEOUT الأول</td></tr>
+<tr><td><b>P1</b></td><td>فتح 2775 inbound وقصره على 35.224.28.251</td><td>جدار الحماية / مجموعة الأمان</td><td>غير مفتوح</td></tr>
+<tr><td><b>P1</b></td><td>التحقق من حل DNS لـ vemail.pp.ua وتصحيحه</td><td>مزوّد DNS</td><td>غير متحقق منه</td></tr>
+<tr><td><b>P2</b></td><td>إنشاء موصل خارجي جديد بالقيم الصحيحة</td><td>Outbound Connectors</td><td>«No connectors yet»</td></tr>
+<tr><td><b>P2</b></td><td>بناء إرجاع DLR تلقائي لكل رسالة مستقبلة</td><td>خادمك (منطق الخدمة)</td><td>غير موجود — خطر EXPIRED قائم</td></tr>
+<tr><td><b>P2</b></td><td>تمديد أول دفعة أرقام من الوجهات الأنشط</td><td>Numbers / Access List (Allocate)</td><td>Mine = 0</td></tr>
+<tr><td><b>P3</b></td><td>تعبئة بيانات السحب (IBAN/SWIFT أو محفظة)</td><td>Billing ← Payment details</td><td>غير معبأة</td></tr>
+<tr><td><b>P3</b></td><td>اختيار دورة الفوترة (أسبوعية 7/7 خصم 30% موصى بها)</td><td>Billing ← Settings</td><td>غير محسومة</td></tr>
+<tr><td><b>P3</b></td><td>ضبط خطاف الوارد (mo_url) لنسخ المورد</td><td>Inbound Connectors</td><td>معطل (OFF)</td></tr>
+<tr><td><b>P3</b></td><td>رفع قائمة أسعار أو متابعة إسناد المسارات</td><td>Price lists / Settlement Rates</td><td>لا رفعات ولا مسارات</td></tr>
+<tr><td><b>P3</b></td><td>إضافة تنبيهات الاستخدام (رسائل/قطع/مبلغ مفوتر)</td><td>Billing ← Usage alerts</td><td>لا تنبيهات</td></tr>
+<tr><td><b>P4</b></td><td>قصر مفتاح API على عناوين خوادمك (IP Allowlist)</td><td>Inbound Connectors</td><td>فراغ = سماح للجميع</td></tr>
+<tr><td><b>P4</b></td><td>تسجيل أسماء مرسل للأسواق التي تشترطها</td><td>Inbound Connectors ← Sender IDs</td><td>«No sender IDs yet»</td></tr>
+<tr><td><b>P4</b></td><td>اقتراح ملفات ترافيك إضافية عند الحاجة</td><td>Profiles ← Propose</td><td>لا اقتراحات</td></tr>
+</tbody>
+</table>
+</div>
+<h3>توصيات تشغيلية من الدراسة</h3>
+<p><strong>ابدأ ضيقًا ثم اتسع:</strong> النزوع الطبيعي بعد الإصلاح هو تمديد أكبر عدد من الأرقام، لكن قاعدة السحب السباعية تعاقب الرقم الخامل وتعيدك لنقطة الصفر معه. الأصح: 3–5 وجهات من الأنشط (مصر والجزائر وميانمار كما ترسم قائمة الوصول)، بأرقام قليلة تخدمها بجودة عالية وDLR منضبط، ثم اتسع بقدر ما يثبت عمود «آخر ترافيك» نشاطه. <strong>واحسب بالتعرفة لا بالعدد:</strong> عينة أسعار التسوية تُظهر فروقًا كبيرة بين الوجهات (Italy Vienna عند 0.0030 مقابل Kyrgyzstan عند 0.0250 — أي ثمانية أضعاف)، وكذلك داخل الوجهة الواحدة بين المجموعات (Algeria 0.0120 مقابل Algeria Azure Random 0.0180)، فمراجعة المجموعات قبل التمديد ترفع عائد الجهد نفسه.</p>
+<h3>مؤشرات النجاح وخطة 30 / 60 / 90 يومًا</h3>
+<p>لتحويل هذه الخطة من قائمة إلى مسار يُقاس، اعتمد خمسة مؤشرات تتوفر كلها في اللوحة نفسها دون أي أداة خارجية: <strong>صفر إشعار «Connector health»</strong> لثلاثة أيام متتالية (المؤشر الأقرب على الإطلاق لصحة الاتصال)، و<strong>أول صف في سجل Outbound Messages</strong> (بداية وجودك التجاري في النظام)، و<strong>حالة «Connecting» تتحول إلى متصل</strong> في جدول روابطك الواردة، و<strong>بلوغ الرصيد 200 دولار</strong> (عتبة أول مدفوع)، و<strong>استقرار عمود «آخر ترافيك»</strong> عند 7/7 لأرقامك (دليل أن قاعدة السحب السباعية لم تعد تهددك). وتوزيع المراحل الزمنية المقترح على أساسها:</p>
+<div class="tbl-wrap">
+<div class="tbl-cap">الجدول 8: خطة التنفيذ الزمنية المقترحة</div>
+<table class="tbl">
+<thead><tr><th>المدة</th><th>الهدف</th><th>معيار الإنجاز</th></tr></thead>
+<tbody>
+<tr><td><b>أول 30 يومًا</b></td><td>إصلاح الاتصال وإنشاء الموصل وتمديد أول 3–5 أرقام</td><td>صفر إشعار فشل لثلاثة أيام متتالية + أول صف في سجل الرسائل</td></tr>
+<tr><td><b>حتى 60 يومًا</b></td><td>تثبيت DLR بلا انقطاع، وضبط خطاف الوارد وبيانات السحب والتنبيهات</td><td>لا رسالة EXPIRED واحدة + ربط وارد متصل + قائمة سماح IP مفعلة</td></tr>
+<tr><td><b>حتى 90 يومًا</b></td><td>التوسع في الوجهات وفق قائمة الوصول ورفع قائمة أسعار للمسارات</td><td>رصيد يبلغ 200$ (عتبة أول مدفوع) + أول فاتورة مولدة</td></tr>
+</tbody>
+</table>
+</div>
+<p>وبهذه المؤشرات تصبح دورة التشغيل مغلقة تمامًا: يظهر الخلل في الإشعار قبل أن يظهر في الأرقام، ويظهر النمو في عمود «آخر ترافيك» قبل أن يظهر في الرصيد، وتظل اللوحة — كما صُممت — مصدر الحقيقة الوحيد لكل قرار تمديد أو توسع، لا مجرد واجهة لقرارات خارجية.</p>
+<p><strong>وللأمان خاتمةً:</strong> مفتاح API يظهر كاملاً في صفحتك وقد أخفيتُ ذيله في هذا التقرير عمداً — لا تشاركه في محادثات أو لقطات، ودوّره فورًا (Rotate) إن اشتبه بانتشاره، وقيّده بقائمة سماح IP (P4 أعلاه). وكلمة مرور ربط «450» تبقى بيدك وحدك؛ وأي بيانات سحب تعبئها تصبح وجهة مستحقاتك فادخلها بعناية مزدوجة. هذه اللوحة، كما أثبتت الدراسة، سوقٌ مبني على الثقة المتبادلة بين طرفين تربطهما منصة وسيطة: كلما أتممت شروطك في الجدول أعلاه، تحركت بقية التروس تلقائيًا — المسارات تُسند، والترافيك ينساب، والفواتير تتوالد، وتتحول إشعارات الفشل اليومية إلى إشعارات نمو.</p>
+<div class="card">
+<p style="margin-bottom:8px"><strong>خلاصة الدراسة في خمسة أسطر:</strong></p>
+<ol style="margin-bottom:0">
+<li><strong>المنصة:</strong> سوق وسيط لترافيك الرسائل بالجملة والتعرفة المميزة، عبر SMPP 3.4 وHTTP فقط — ودورك فيها <strong>مورد/Supplier</strong> يُدفع له عن كل رسالة يحملها.</li>
+<li><strong>هويتك:</strong> Abass رقم #25، ملف WHOLESALE/WSALE، رصيد 0.0000، حالة ACTIVE — هيكل حساب مكتمل لكنه بلا أي تشغيل منذ الفتح.</li>
+<li><strong>العائق الأول:</strong> خادم vemail.pp.ua:2775 لا يستجيب (ETIMEOUT منذ 30/9) — إصلاحه مع السماح من 35.224.28.251 هو البوابة إلى كل شيء آخر.</li>
+<li><strong>العائق الثاني:</strong> صفر أرقام ممدّدة وصفر مسارات مسندة — بلا تمديد أرقام لا يوجَّه إليك أي ترافيك مهما أصلحت الاتصال.</li>
+<li><strong>القاعدة الذهبية:</strong> إيصال DLR لكل رسالة خلال 24 ساعة، والرقم الخامل 7 أيام يُسحب تلقائيًا — فابدأ ضيقًا، وتوسّع بقدر ما يثبت النشاط لا بقدر الطموح.</li>
+</ol>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+- generic [ref=e1] clickable [onclick]
+  - navigation
+    - heading "SMS Platform" [level=1, ref=e9]
+    - button "Dashboard 18" [ref=e10]
+      - StaticText "Dashboard"
+      - StaticText "18"
+    - button "Outbound Messages" [ref=e11]
+    - button "Outbound Connectors" [ref=e12]
+    - button "Settlement Rates" [ref=e13]
+    - button "Price lists" [ref=e14]
+    - button "Numbers" [ref=e15]
+    - button "Release history" [ref=e16]
+    - button "Profiles" [ref=e17]
+    - button "Access List" [ref=e18]
+    - button "Inbound Connectors" [ref=e19]
+    - button "Billing" [ref=e20]
+    - button "Support" [ref=e21]
+    - button "Sign out" [ref=e22]
+  - main
+    - heading "Outbound Messages (supplier side — traffic we deliver to you; click a row for the delivery log)" [level=2, ref=e127]
+      - StaticText "Outbound Messages (supplier side — traffic we deliver to you; click a row for the delivery log)"
+    - paragraph
+      - StaticText "Messages we routed to you. Amounts are what you're owed (vendor cost) — settled on the AP side of Billing."
+    - textbox "Search from/to/id/status…" [ref=e128]
+    - combobox "Match — Broad: contains · Narrow: whole word · Exact: full value" [expanded=false, ref=e129]: Broad
+      - MenuListPopup
+        - option "Broad" [selected, ref=e136]
+        - option "Narrow" [ref=e137]
+        - option "Exact" [ref=e138]
+    - combobox "Combine multiple terms — AND: all must match · OR: any" [expanded=false, ref=e130]: AND
+      - MenuListPopup
+        - option "AND" [selected, ref=e139]
+        - option "OR" [ref=e140]
+    - combobox [expanded=false, ref=e131]: ALL
+      - MenuListPopup
+        - option "ALL" [selected, ref=e141]
+        - option "MT" [ref=e142]
+        - option "MO" [ref=e143]
+    - combobox "Rows per page" [expanded=false, ref=e132]: 100 / page
+      - MenuListPopup
+        - option "100 / page" [selected, ref=e144]
+        - option "500 / page" [ref=e145]
+        - option "1000 / page" [ref=e146]
+        - option "10000 / page" [ref=e147]
+    - button "Export ▾" [expanded=false, ref=e135]
+    - table
+      - rowgroup
+        - row
+          - columnheader "Select all on page" [ref=e148]
+            - checkbox "Select all on page" [checked=false, ref=e159]
+          - columnheader "Dir" [ref=e149]
+          - columnheader "From" [ref=e150]
+          - columnheader "To" [ref=e151] clickable [cursor:pointer, onclick]
+          - columnheader "Seg" [ref=e152]
+          - columnheader "Class" [ref=e153]
+          - columnheader "CR" [ref=e154]
+          - columnheader "Vendor msg id" [ref=e155]
+          - columnheader "Cost" [ref=e156] clickable [cursor:pointer, onclick]
+          - columnheader "Status" [ref=e157] clickable [cursor:pointer, onclick]
+          - columnheader "When ▼" [ref=e158] clickable [cursor:pointer, onclick]
+    - button "Prev" [disabled, ref=e133]
+    - button "Next" [disabled, ref=e134]

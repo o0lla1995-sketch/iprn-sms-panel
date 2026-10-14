@@ -1,0 +1,67 @@
+- generic [ref=e1] clickable [onclick]
+  - navigation
+    - heading "SMS Platform" [level=1, ref=e9]
+    - button "Dashboard 18" [ref=e10]
+      - StaticText "Dashboard"
+      - StaticText "18"
+    - button "Outbound Messages" [ref=e11]
+    - button "Outbound Connectors" [ref=e12]
+    - button "Settlement Rates" [ref=e13]
+    - button "Price lists" [ref=e14]
+    - button "Numbers" [ref=e15]
+    - button "Release history" [ref=e16]
+    - button "Profiles" [ref=e17]
+    - button "Access List" [ref=e18]
+    - button "Inbound Connectors" [ref=e19]
+    - button "Billing" [ref=e20]
+    - button "Support" [ref=e21]
+    - button "Sign out" [ref=e22]
+  - main
+    - heading "Outbound Connectors (supplier side)" [level=2, ref=e160]
+      - StaticText "Outbound Connectors (supplier side)"
+    - paragraph
+      - StaticText "The SMSCs we bind out to in order to deliver traffic to you (SMPP or HTTP)."
+    - StaticText "Connection details — our platform (fixed, same for everyone)"
+    - StaticText "Our IP (we connect from)"
+    - strong
+      - StaticText "35.224.28.251"
+    - StaticText "Protocols"
+    - strong
+      - StaticText "SMPP 3.4 / HTTP"
+    - paragraph
+      - StaticText "SMPP binds and HTTP MO pushes to your SMSC originate from this IP — allowlist it on your firewall. You set everything else on each connector yourself: host, port, username (system_id), password and protocol (adapter). To send traffic "
+      - emphasis
+      - StaticText " us instead, see "
+      - strong
+      - StaticText " — same IP, SMPP port 2775, HTTP https://sms.carefulsupport.com."
+    - LabelText
+      - StaticText "Adapter"
+    - textbox [ref=e161]: generic-smpp34
+      - StaticText "generic-smpp34"
+    - LabelText
+      - StaticText "Host"
+    - textbox [ref=e162]
+    - LabelText
+      - StaticText "Port"
+    - textbox [ref=e163]: 2775
+      - StaticText "2775"
+    - LabelText
+      - StaticText "system_id"
+    - textbox [ref=e164]
+    - LabelText
+      - StaticText "password"
+    - textbox [ref=e165]
+    - LabelText
+      - StaticText "MO mode"
+    - combobox [expanded=false, ref=e166]: SAME_BIND
+      - MenuListPopup
+        - option "SAME_BIND" [selected, ref=e169]
+        - option "SEPARATE_RX" [ref=e170]
+        - option "HTTP_PUSH" [ref=e171]
+    - LabelText
+      - StaticText "Profile"
+    - combobox "A connector tied to a profile carries only that profile's traffic; 'Any profile' carries the rest." [expanded=false, ref=e167]: Any profile
+      - MenuListPopup
+        - option "Any profile" [selected, ref=e172]
+        - option "WHOLESALE" [ref=e173]
+    - button "Add connector" [ref=e168]
