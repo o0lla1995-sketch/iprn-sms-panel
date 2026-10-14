@@ -1,0 +1,189 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Accounts ────────────────────────────────────────────────────────────────
+// role: ADMIN | AGENT | USER     status: ACTIVE | SUSPENDED
+// marginPercent  = hidden admin margin on this user's earnings (ADMIN ONLY, never exposed to non-admin roles)
+// agentCommissionPercent = share of the admin margin paid to the parent agent
+model User {
+  id                     String    @id @default(cuid())
+  email                  String    @unique
+  passwordHash           String
+  name                   String
+  role                   String    @default("USER")
+  parentId               String?
+  status                 String    @default("ACTIVE")
+  marginPercent          Float     @default(30)
+  agentCommissionPercent Float     @default(10)
+  walletBalance          Float     @default(0)
+  payoutSchedule         String    @default("MONTHLY") // WEEKLY (factoring, fee applies) | MONTHLY
+  payoutMethod           String?
+  webhookUrl             String?
+  webhookSecret          String?
+  smppSystemId           String?   @unique
+  smppPassword           String?
+  apiKey                 String    @unique
+  lastLoginAt            DateTime?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  parent     User?          @relation("AgentUsers", fields: [parentId], references: [id])
+  children   User[]         @relation("AgentUsers")
+  numbers    Did[]          @relation("DidOwner")
+  messages   Message[]      @relation("MessageOwner")
+  transactions Transaction[]
+  payouts    PayoutRequest[]
+}
+
+// ─── DID numbers (premium numbers inventory) ─────────────────────────────────
+// status: AVAILABLE | ASSIGNED | RELEASED
+// trueRate = TRUE vendor rate paid upstream (ADMIN ONLY)
+model Did {
+  id             String    @id @default(cuid())
+  number         String    @unique // E.164 digits only, no +
+  destination    String
+  model          String    @default("PRN") // PRN | WHOLESALE
+  class          String    @default("BOTH") // P2P | A2P | BOTH
+  capability     String    @default("TWO_WAY")
+  trueRate       Float     @default(0)
+  status         String    @default("AVAILABLE")
+  assignedUserId String?
+  assignedAt     DateTime?
+  lastTrafficAt  DateTime?
+  source         String    @default("MANUAL") // MANUAL | IMPORT | DEMO
+  note           String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  assignedUser User?     @relation("DidOwner", fields: [assignedUserId], references: [id])
+  messages     Message[]
+}
+
+// ─── Settlement rate groups (mirrors upstream "Settlement Rates" table) ──────
+// trueRate = TRUE vendor rate (ADMIN ONLY). User-facing rates are derived:
+// userRate = trueRate * (1 - margin/100)
+model RateGroup {
+  id           String   @id @default(cuid())
+  destination  String
+  model        String   @default("PRN")
+  class        String   @default("BOTH")
+  trueRate     Float
+  numbersCount Int      @default(0)
+  note         String?
+  updatedAt    DateTime @updatedAt
+
+  @@index([destination])
+}
+
+// ─── Inbound traffic (P2P / A2P messages received on premium numbers) ────────
+// channel: SMPP | WEBHOOK | HTTP_PUSH | IMPORT | MANUAL
+// carriedBy: PANEL | USER       billingStatus: PENDING | BILLED | ZERO | UNPRICED
+model Message {
+  id            String    @id @default(cuid())
+  upstreamId    String?
+  dedupHash     String    @unique
+  didId         String?
+  numberTo      String
+  numberFrom    String
+  text          String    @default("")
+  segments      Int       @default(1)
+  class         String    @default("P2P")
+  channel       String    @default("SMPP")
+  simulated     Boolean   @default(false)
+  carriedBy     String    @default("PANEL")
+  carriedAt     DateTime?
+  userId        String?
+  trueCost      Float     @default(0) // ADMIN ONLY: true upstream value
+  userEarning   Float     @default(0)
+  marginKept    Float     @default(0) // ADMIN ONLY
+  billingStatus String    @default("PENDING")
+  receivedAt    DateTime  @default(now())
+  deletedAt     DateTime?
+
+  did          Did?          @relation(fields: [didId], references: [id])
+  user         User?         @relation("MessageOwner", fields: [userId], references: [id])
+  transactions Transaction[]
+
+  @@index([userId, receivedAt])
+  @@index([receivedAt])
+  @@index([didId])
+  @@index([deletedAt])
+}
+
+// ─── Ledger ──────────────────────────────────────────────────────────────────
+// type: EARNING | PAYOUT | PAYOUT_REFUND | ADJUSTMENT | COMMISSION | RENTAL
+model Transaction {
+  id           String   @id @default(cuid())
+  userId       String
+  type         String
+  amount       Float // signed
+  balanceAfter Float
+  messageId    String?
+  payoutId     String?
+  note         String?
+  simulated    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  user    User     @relation(fields: [userId], references: [id])
+  message Message? @relation(fields: [messageId], references: [id])
+
+  @@index([userId, createdAt])
+}
+
+model PayoutRequest {
+  id         String    @id @default(cuid())
+  userId     String
+  amount     Float
+  feePercent Float     @default(0)
+  fee        Float     @default(0)
+  net        Float
+  schedule   String // WEEKLY | MONTHLY
+  method     String?
+  status     String    @default("PENDING") // PENDING | APPROVED | PAID | REJECTED
+  adminNote  String?
+  createdAt  DateTime  @default(now())
+  processedAt DateTime?
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, createdAt])
+  @@index([status])
+}
+
+// ─── Key/value settings + audit + raw upstream events ────────────────────────
+model Setting {
+  key        String   @id
+  value      String
+  updatedAt  DateTime @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  actorEmail String?
+  action     String
+  entity     String?
+  entityId   String?
+  detail     String?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([action])
+}
+
+model RawEvent {
+  id         String   @id @default(cuid())
+  source     String // MO_WEBHOOK | HTTP_PUSH | SMPP | API | WEBHOOK_OUT
+  payload    String
+  processed  Boolean  @default(false)
+  note       String?
+  receivedAt DateTime @default(now())
+
+  @@index([receivedAt])
+}
