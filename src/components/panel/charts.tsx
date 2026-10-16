@@ -8,8 +8,10 @@ import {
 export interface DayPoint {
   day: string
   userEarning: number
-  marginKept: number
-  trueValue: number
+  /** admin-only series — omitted entirely from non-admin payloads */
+  marginKept?: number
+  /** admin-only series — omitted entirely from non-admin payloads */
+  trueValue?: number
   count: number
 }
 

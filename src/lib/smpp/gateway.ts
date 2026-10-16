@@ -1,10 +1,25 @@
 import 'server-only'
 import * as smpp from 'smpp'
+import * as net from 'node:net'
 import { randomBytes } from 'crypto'
 import { db } from '@/lib/db'
 import { getSettings } from '@/lib/settings'
 import { ingestInbound, pushToUser } from '@/lib/ingest'
 import type { Pdu, Session } from 'smpp'
+
+/**
+ * Gateway live state. Backed by globalThis because the instrumentation
+ * bundle (which starts the gateway) and route bundles (which report status)
+ * get separate module instances — the process-global object keeps ONE truth.
+ */
+interface GwState {
+  started: boolean
+  port: number
+  upstreamSession: any | null
+  userSessions: Map<string, Set<any>>
+}
+const g = globalThis as unknown as { __iprnGw?: GwState }
+const S: GwState = (g.__iprnGw ??= { started: false, port: 0, upstreamSession: null, userSessions: new Map() })
 
 
 /**
@@ -20,26 +35,23 @@ import type { Pdu, Session } from 'smpp'
  *     (deliver_sm). Their deliver_sm_resp marks the message carried by the user.
  */
 
-const userSessions = new Map<string, Set<any>>() // userId → live sessions
-let upstreamSession: any = null
-let started = false
-let listeningPort = 0
+const userSessions = S.userSessions // userId → live sessions
 
 export async function startGateway(): Promise<void> {
-  if (started) return
+  if (S.started) return
   if (process.env.ENABLE_SMPP === 'false') {
     console.log('[smpp] gateway disabled via ENABLE_SMPP=false')
     return
   }
   const s = await getSettings()
-  listeningPort = Number(s.smpp_port || process.env.SMPP_PORT || 2775)
+  S.port = Number(s.smpp_port || process.env.SMPP_PORT || 2775)
   const server = smpp.createServer({ debug: false }, (session: any) => attach(session))
   server.on('error', (e) => console.error('[smpp] server error:', (e as Error)?.message))
-  server.listen(listeningPort, '0.0.0.0', () => {
-    started = true
-    console.log(`[smpp] gateway listening on 0.0.0.0:${listeningPort}`)
+  server.listen(S.port, '0.0.0.0', () => {
+    S.started = true
+    console.log(`[smpp] gateway listening on 0.0.0.0:${S.port}`)
   })
-  started = true
+  S.started = true
 }
 
 function attach(session: any) {
@@ -72,7 +84,7 @@ async function onBind(session: any, pdu: Pdu) {
   // 1) upstream platform connector bind
   if (sid && sid === s.upstream_smpp_system_id && pass && pass === s.upstream_smpp_password) {
     session._gw.isUpstream = true
-    upstreamSession = session
+    S.upstreamSession = session
     console.log(`[smpp] UPSTREAM platform bound (system_id=${sid})`)
     session.send(pdu.response({ command_status: smpp.ESME_ROK }))
     db.rawEvent
@@ -256,7 +268,7 @@ export async function deliverToUser(
 }
 
 function cleanup(session: any) {
-  if (session._gw?.isUpstream && upstreamSession === session) upstreamSession = null
+  if (session._gw?.isUpstream && S.upstreamSession === session) S.upstreamSession = null
   if (session._gw?.userId) {
     const set = userSessions.get(session._gw.userId)
     if (set) {
@@ -268,11 +280,45 @@ function cleanup(session: any) {
 
 export function gatewayStatus() {
   let onlineUsers = 0
-  for (const set of userSessions.values()) onlineUsers += set.size
+  for (const set of S.userSessions.values()) onlineUsers += set.size
   return {
-    started,
-    port: listeningPort,
-    upstreamConnected: !!upstreamSession,
+    started: S.started,
+    port: S.port,
+    upstreamConnected: !!S.upstreamSession,
     userBindCount: onlineUsers,
   }
+}
+
+/**
+ * True when the SMPP port accepts connections. Belt & braces for dev, where
+ * the instrumentation bundle that started the listener is a different module
+ * instance from the route bundles reporting status: the TCP probe verifies
+ * the listener is really up regardless of which instance holds the state.
+ */
+export async function gatewayListening(): Promise<boolean> {
+  if (process.env.ENABLE_SMPP === 'false') return false
+  if (S.started) return true
+  if (!S.port) {
+    const s = await getSettings()
+    S.port = Number(s.smpp_port || process.env.SMPP_PORT || 2775)
+  }
+  const port = S.port
+  if (!port) return false
+  return new Promise<boolean>((resolve) => {
+    let settled = false
+    const done = (v: boolean) => {
+      if (settled) return
+      settled = true
+      try {
+        sock.destroy()
+      } catch {
+        /* already closed */
+      }
+      resolve(v)
+    }
+    const sock = net.connect({ port, host: '127.0.0.1' })
+    sock.setTimeout(600, () => done(false))
+    sock.on('connect', () => done(true))
+    sock.on('error', () => done(false))
+  })
 }

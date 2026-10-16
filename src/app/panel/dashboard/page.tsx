@@ -2,15 +2,18 @@ import Link from 'next/link'
 import { requireSession } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { getSettings } from '@/lib/settings'
-import { fmtMoney, fmtDateTime, trafficState } from '@/lib/format'
+import { gatewayStatus, gatewayListening } from '@/lib/smpp/gateway'
+import { fmtMoney, fmtDateTime, timeAgo, trafficState } from '@/lib/format'
+import { cn } from '@/lib/utils'
 import { Kpi } from '@/components/panel/kpi'
+import { CountdownBadge } from '@/components/panel/countdown-badge'
 import { EarningsChart, ClassBars, TrafficVolumeChart, type DayPoint } from '@/components/panel/charts'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   Hash, MessageSquareText, DollarSign, Users, AlertTriangle, Radio,
-  Landmark, Activity, TrendingUp,
+  Landmark, Activity, TrendingUp, Webhook,
 } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
@@ -43,9 +46,12 @@ function aggregate<T extends { simulated: boolean; trueCost: number; userEarning
 }
 
 function byDay<T extends { receivedAt: Date; simulated: boolean; trueCost: number; userEarning: number; marginKept: number }>(
-  rows: T[]
+  rows: T[],
+  includeMargin = true
 ): DayPoint[] {
-  const map = new Map<string, DayPoint>()
+  // internal accumulator keeps the admin-only fields non-optional; they are
+  // stripped from the returned points for non-admin callers (see below)
+  const map = new Map<string, { day: string; userEarning: number; marginKept: number; trueValue: number; count: number }>()
   for (let i = 13; i >= 0; i--) {
     const d = new Date(Date.now() - i * DAY).toISOString().slice(0, 10)
     map.set(d, { day: d, userEarning: 0, marginKept: 0, trueValue: 0, count: 0 })
@@ -60,12 +66,13 @@ function byDay<T extends { receivedAt: Date; simulated: boolean; trueCost: numbe
     p.trueValue += r.trueCost
     p.count += 1
   }
-  return [...map.values()].map((p) => ({
-    ...p,
-    userEarning: +p.userEarning.toFixed(4),
-    marginKept: +p.marginKept.toFixed(4),
-    trueValue: +p.trueValue.toFixed(4),
-  }))
+  // non-admin chart payloads omit the margin/true keys entirely: neither the
+  // names nor the values ever transit to a USER or AGENT browser
+  return [...map.values()].map((p) =>
+    includeMargin
+      ? { day: p.day, userEarning: +p.userEarning.toFixed(4), marginKept: +p.marginKept.toFixed(4), trueValue: +p.trueValue.toFixed(4), count: p.count }
+      : { day: p.day, userEarning: +p.userEarning.toFixed(4), count: p.count }
+  )
 }
 
 function classSplit<T extends { class: string; simulated: boolean }>(rows: T[]) {
@@ -147,7 +154,11 @@ export default async function DashboardPage() {
     const dangerNumbers = await db.did.findMany({ where: { status: 'ASSIGNED' } })
     const danger = dangerNumbers.filter((d) => trafficState(d.lastTrafficAt, d.assignedAt).level === 'DANGER')
 
-    const gw = { port: settings.smpp_port || '2775', moSet: !!settings.public_url }
+    // ── Platform link status (admin) ──
+    const gw = gatewayStatus()
+    const gwListening = await gatewayListening()
+    const lastEvent = await db.rawEvent.findFirst({ orderBy: { receivedAt: 'desc' } })
+    const webhookReady = !!(settings.public_url && settings.mo_webhook_secret)
 
     return (
       <div className="space-y-6">
@@ -175,6 +186,60 @@ export default async function DashboardPage() {
           <div className="space-y-4">
             <Card>
               <CardHeader className="pb-2">
+                <CardTitle className="text-base">Platform link</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3 text-sm">
+                <div className="flex items-start gap-2">
+                  <Radio className={cn('size-4 mt-0.5 shrink-0', gwListening ? 'text-emerald-600' : 'text-destructive')} aria-hidden />
+                  <div className="min-w-0">
+                    <p className="font-medium">SMPP gateway {gwListening ? `listening :${gw.port || settings.smpp_port || '2775'}` : 'not started'}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {gw.upstreamConnected ? 'upstream platform bound' : 'awaiting upstream platform bind'}
+                      {gw.userBindCount > 0 ? ` · ${gw.userBindCount} user bind(s)` : ''}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Webhook className={cn('size-4 mt-0.5 shrink-0', webhookReady ? 'text-emerald-600' : 'text-amber-600 dark:text-amber-400')} aria-hidden />
+                  <div className="min-w-0">
+                    <p className="font-medium">Vendor-copy MO webhook {webhookReady ? 'configured' : 'incomplete'}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {settings.public_url ? 'public URL set' : 'public URL missing'} ·{' '}
+                      {settings.mo_webhook_secret ? 'secret set' : 'secret missing'} — Settings → Upstream
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Activity className="size-4 mt-0.5 shrink-0 text-muted-foreground" aria-hidden />
+                  <div className="min-w-0">
+                    <p className="font-medium">
+                      Last raw event: {lastEvent ? `${lastEvent.source} · ${timeAgo(lastEvent.receivedAt)}` : 'none yet'}
+                    </p>
+                    {lastEvent && <p className="text-xs text-muted-foreground">{fmtDateTime(lastEvent.receivedAt)}</p>}
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Hash className="size-4 mt-0.5 shrink-0 text-muted-foreground" aria-hidden />
+                  <div className="min-w-0">
+                    <p className="font-medium">{assignedNumbers} sourced number(s)</p>
+                    <p className="text-xs text-muted-foreground">{availableNumbers} available in the pool</p>
+                  </div>
+                </div>
+                <div className={cn('flex items-start gap-2', danger.length > 0 ? 'text-destructive' : 'text-muted-foreground')}>
+                  <AlertTriangle className="size-4 mt-0.5 shrink-0" aria-hidden />
+                  <div className="min-w-0">
+                    <p className="font-medium">
+                      {danger.length} number(s) at risk (≤3 days left of the 7-day rule)
+                    </p>
+                    <Button asChild variant="outline" size="sm" className="mt-1 h-7 text-xs">
+                      <Link href="/panel/numbers?tab=at-risk">Review at-risk numbers</Link>
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
                 <CardTitle className="text-base">Traffic by class (7d)</CardTitle>
               </CardHeader>
               <CardContent>
@@ -186,7 +251,7 @@ export default async function DashboardPage() {
                 <CardTitle className="text-base">System</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2 text-sm">
-                <p className="flex items-center gap-2"><Radio className="size-4 text-muted-foreground" aria-hidden /> SMPP gateway :{gw.port} · egress allowlist 35.224.28.251</p>
+                <p className="flex items-center gap-2"><Radio className="size-4 text-muted-foreground" aria-hidden /> SMPP gateway :{gw.started ? gw.port : settings.smpp_port || '2775'} · egress allowlist 35.224.28.251</p>
                 <p className="flex items-center gap-2"><Users className="size-4 text-muted-foreground" aria-hidden /> {userCount} accounts · {agentUsers.length} agent(s)</p>
                 <p className="flex items-center gap-2"><Hash className="size-4 text-muted-foreground" aria-hidden /> {assignedNumbers} assigned · {availableNumbers} available numbers</p>
                 {unpriced > 0 && (
@@ -314,7 +379,8 @@ export default async function DashboardPage() {
             <CardTitle className="text-base">Sub-user traffic — last 14 days</CardTitle>
           </CardHeader>
           <CardContent>
-            <EarningsChart data={byDay(rows)} showMargin={false} />
+            {/* sanitized: margin/true values are zeroed for non-admin chart payloads */}
+            <EarningsChart data={byDay(rows, false)} showMargin={false} />
           </CardContent>
         </Card>
         <Card>
@@ -390,7 +456,8 @@ export default async function DashboardPage() {
             <CardTitle className="text-base">My earnings — last 14 days</CardTitle>
           </CardHeader>
           <CardContent>
-            <EarningsChart data={byDay(rows)} showMargin={false} />
+            {/* sanitized: margin/true values are zeroed for non-admin chart payloads */}
+            <EarningsChart data={byDay(rows, false)} showMargin={false} />
           </CardContent>
         </Card>
         <Card>
@@ -399,7 +466,7 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent>
             <ClassBars {...classSplit(recent7)} />
-            <TrafficVolumeChart data={byDay(rows)} />
+            <TrafficVolumeChart data={byDay(rows, false)} />
           </CardContent>
         </Card>
       </div>
@@ -420,12 +487,7 @@ export default async function DashboardPage() {
                     <li key={d.id} className="flex items-center justify-between gap-2 text-sm border rounded-lg px-3 py-2">
                       <span className="font-mono text-xs">+{d.number}</span>
                       <span className="text-xs text-muted-foreground truncate">{d.destination}</span>
-                      <Badge
-                        variant={t.level === 'OK' ? 'secondary' : t.level === 'WARN' ? 'outline' : 'destructive'}
-                        className={t.level === 'WARN' ? 'border-amber-500 text-amber-600' : ''}
-                      >
-                        {t.label}
-                      </Badge>
+                      <CountdownBadge state={t} />
                     </li>
                   )
                 })}

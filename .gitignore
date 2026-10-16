@@ -26,3 +26,5 @@ scripts/report_numbered.pdf
 .DS_Store
 scripts/prod-creds.json
 scripts/gen-deploy-key.ts
+tool-results/
+tsconfig.tsbuildinfo
